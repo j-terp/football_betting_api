@@ -12,30 +12,40 @@ row = single_match(0)
 print(relevant_data)
 print(match_list)
 print(row)
-print(match_list[2])
-print(match_list[2]["AY"])
 """
+
+
 def HTG_compare(match):
     hometeam = match_list[match]['HTHG']
     awayteam = match_list[match]['HTAG']
 
     if hometeam > awayteam:
-        return 1
+        return "H"
     elif hometeam == awayteam:
-        return 0
+        return "D"
     else:
-        return -1
+        return "A"
 
 def ST_compare(match):
     hometeam = match_list[match]['HST']
     awayteam = match_list[match]['AST']
 
     if hometeam > awayteam:
-        return 0.5
+        return "H"
     elif hometeam == awayteam:
+        return "D"
+    else:
+        return "A"
+
+def value(results, val):
+    if results.count('H') > results.count('A'):
+        return 1
+    elif results.count('D') > results.count('A') and results.count('D') > results.count('H'):
         return 0
     else:
-        return -0.5
+        return -1
+
+
 
 def winning_team(team_score):
     print(team_score)
@@ -46,10 +56,11 @@ def winning_team(team_score):
     else:
         print("Draw")
 
-for y in match_list:
-    team_score = HTG_compare(y)
-    team_score += ST_compare(y)
-    winning_team(team_score)
+
+for y, val in enumerate(match_list):
+    results = HTG_compare(y)
+    results += ST_compare(y)
+    results_value = value(y, val)
 
 
 
