@@ -1,4 +1,5 @@
 from get_data import dataset_to_dictionary, fetch_data, single_match
+from get_values import football_values
 
 
 relevant_data = fetch_data() # Hämtar data
@@ -7,6 +8,7 @@ match_list = dataset_to_dictionary(relevant_data) # Konverterar datan till dicti
 # match_list[index för matchens rad][target-data]
 
 row = single_match(0)
+
 
 """
 print(relevant_data)
@@ -20,32 +22,26 @@ def HTG_compare(match):
     awayteam = match_list[match]['HTAG']
 
     if hometeam > awayteam:
-        return "H"
+        return football_values[0], "H"
+    
     elif hometeam == awayteam:
-        return "D"
+        return 0, "D"
+    
     else:
-        return "A"
+        return -(football_values[0]), "A"
 
 def ST_compare(match):
     hometeam = match_list[match]['HST']
     awayteam = match_list[match]['AST']
 
     if hometeam > awayteam:
-        return "H"
+        return football_values[1], "H"
+    
     elif hometeam == awayteam:
-        return "D"
+        return 0, "D"
+    
     else:
-        return "A"
-
-def value(results, val):
-    if results.count('H') > results.count('A'):
-        return 1
-    elif results.count('D') > results.count('A') and results.count('D') > results.count('H'):
-        return 0
-    else:
-        return -1
-
-
+        return -(football_values[1]), "A"
 
 def winning_team(team_score):
     print(team_score)
@@ -57,10 +53,14 @@ def winning_team(team_score):
         print("Draw")
 
 
-for y, val in enumerate(match_list):
-    results = HTG_compare(y)
-    results += ST_compare(y)
-    results_value = value(y, val)
+
+for y in match_list:
+    results = HTG_compare(y)[0]
+    function_return_id = HTG_compare(y)[1]
+    results += ST_compare(y)[0]
+    function_return_id += ST_compare(y)[1]
+    winning_team(results)
+    print(function_return_id)
 
 
 
