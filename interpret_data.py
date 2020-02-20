@@ -46,21 +46,31 @@ def ST_compare(match):
 def winning_team(team_score):
     print(team_score)
     if team_score > 0:
-        print("Home team wins")
+        return "H"
     elif team_score < 0:
-        print("Away team wins")
+        return "A"
     else:
-        print("Draw")
+        return "D"
+
+def check_predictions(match, results):
+    if results == match_list[match]['FTR']:
+        print("Program was correct")
+        return 1
+    else:
+        print("Program was incorrect")
+        return 0
 
 
-
+predictions = 0
 for y in match_list:
     results = HTG_compare(y)[0]
     function_return_id = HTG_compare(y)[1]
     results += ST_compare(y)[0]
     function_return_id += ST_compare(y)[1]
-    winning_team(results)
-    print(function_return_id)
+    match_predictions = winning_team(results)
+    predictions += check_predictions(y, match_predictions)
+print("Program predicted results in ", round(((predictions / 380) * 100)), "%", "of matches")
+
 
 
 

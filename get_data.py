@@ -7,7 +7,7 @@ def fetch_data():
 
 def dataset_to_dictionary(dataset):
     main_dictionary = {}
-    for i in range(3): # Möjligt att iterera alla matcher med loop, tillfälligt endast 3 (totala är 380)
+    for i in range(380): # Möjligt att iterera alla matcher med loop, tillfälligt endast 3 (totala är 380)
         temp_dict = {}
         for j in range(14):
             temp_dict[dataset.columns[j]] = dataset.loc[i,:][j]
