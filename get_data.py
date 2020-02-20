@@ -6,12 +6,7 @@ def fetch_data():
     return output # Sorted data
 
 def dataset_to_dictionary(dataset):
-    main_dictionary = {}
-    for i in range(380): # Möjligt att iterera alla matcher med loop, tillfälligt endast 3 (totala är 380)
-        temp_dict = {}
-        for j in range(14):
-            temp_dict[dataset.columns[j]] = dataset.loc[i,:][j]
-        main_dictionary[i] = temp_dict
+    main_dictionary = dataset.to_dict('index')
     return main_dictionary
 
 def single_match(index):

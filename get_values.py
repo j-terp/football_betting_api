@@ -3,7 +3,7 @@ def get_values():
     f = open("football_values.txt", "r")
     values = (f.read())
 
-    # conver to the list
+    # convert to the list
     list = values.split (",")
 
     # convert each element as integers
