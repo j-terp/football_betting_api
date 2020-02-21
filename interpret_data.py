@@ -135,7 +135,8 @@ for y in match_list:
     match_predictions = winning_team(results)
     predictions += check_predictions(y, match_predictions)
     money_earned += betting(y, match_predictions)
-print(money_earned)
+print(money_earned, " kr earned")
+print((money_earned/380), " kr earned on average per match")
 print("Program predicted results in ", round(((predictions / 380) * 100)), "%", "of matches")
 
 
