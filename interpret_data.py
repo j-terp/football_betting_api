@@ -102,7 +102,19 @@ def check_predictions(match, results):
         print("Program was incorrect")
         return 0
 
+def betting(match, results):
+    money_bet = 100
+    if results == match_list[match]['FTR']:
+        if results == "H":
+            return money_bet * match_list[match]['B365H']
+        elif results == 'D':
+            return money_bet * match_list[match]['B365D']
+        else:
+            return money_bet * match_list[match]['B365A']
+    else:
+        return -100
 
+money_earned = 0
 predictions = 0
 for y in match_list:
     results = HTG_compare(y)[0]
@@ -122,6 +134,8 @@ for y in match_list:
     
     match_predictions = winning_team(results)
     predictions += check_predictions(y, match_predictions)
+    money_earned += betting(y, match_predictions)
+print(money_earned)
 print("Program predicted results in ", round(((predictions / 380) * 100)), "%", "of matches")
 
 

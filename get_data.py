@@ -2,7 +2,7 @@ import pandas as pd
 
 def fetch_data():
     data = pd.read_csv(r'football_data.csv') # All data
-    output = pd.DataFrame(data, columns= ['HomeTeam','AwayTeam', 'FTHG','FTAG','FTR','HTHG','HTAG','HS','AS','HST','AST','HY','AY','HR','AR'])
+    output = pd.DataFrame(data, columns= ['HomeTeam','AwayTeam', 'FTHG','FTAG','FTR','HTHG','HTAG','HS','AS','HST','AST','HY','AY','HR','AR','B365H','B365A','B365D'])
     return output # Sorted data
 
 def dataset_to_dictionary(dataset):
