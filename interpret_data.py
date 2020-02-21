@@ -1,6 +1,7 @@
 from get_data import dataset_to_dictionary, fetch_data, single_match
 from get_values import football_values
-
+import time
+start_time = time.time()
 
 relevant_data = fetch_data() # Hämtar data
 
@@ -138,7 +139,7 @@ for y in match_list:
 print(money_earned, " kr earned")
 print((money_earned/380), " kr earned on average per match")
 print("Program predicted results in ", round(((predictions / 380) * 100)), "%", "of matches")
-
+print("--- %s seconds ---" % (time.time() - start_time))
 
 
 
