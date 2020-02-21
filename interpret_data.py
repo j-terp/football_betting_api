@@ -30,9 +30,10 @@ def HTG_compare(match):
     else:
         return -(football_values[0]), "A"
 
-def ST_compare(match):
-    hometeam = match_list[match]['HST']
-    awayteam = match_list[match]['AST']
+
+def S_compare(match):
+    hometeam = match_list[match]['HS']
+    awayteam = match_list[match]['AS']
 
     if hometeam > awayteam:
         return football_values[1], "H"
@@ -42,6 +43,47 @@ def ST_compare(match):
     
     else:
         return -(football_values[1]), "A"
+
+def ST_compare(match):
+    hometeam = match_list[match]['HST']
+    awayteam = match_list[match]['AST']
+
+    if hometeam > awayteam:
+        return football_values[2], "H"
+    
+    elif hometeam == awayteam:
+        return 0, "D"
+    
+    else:
+        return -(football_values[2]), "A"
+
+def Y_compare(match):
+    hometeam = match_list[match]['HY']
+    awayteam = match_list[match]['AY']
+
+    if hometeam > awayteam:
+        return football_values[3], "H"
+    
+    elif hometeam == awayteam:
+        return 0, "D"
+    
+    else:
+        return -(football_values[3]), "A"
+
+
+def R_compare(match):
+    hometeam = match_list[match]['HR']
+    awayteam = match_list[match]['AR']
+
+    if hometeam > awayteam:
+        return football_values[4], "H"
+    
+    elif hometeam == awayteam:
+        return 0, "D"
+    
+    else:
+        return -(football_values[4]), "A"
+
 
 def winning_team(team_score):
     print(team_score)
@@ -65,11 +107,23 @@ predictions = 0
 for y in match_list:
     results = HTG_compare(y)[0]
     function_return_id = HTG_compare(y)[1]
+    
     results += ST_compare(y)[0]
     function_return_id += ST_compare(y)[1]
+    
+    results += S_compare(y)[0]
+    function_return_id += S_compare(y)[1]
+    
+    results += Y_compare(y)[0]
+    function_return_id += Y_compare(y)[1]
+    
+    results += R_compare(y)[0]
+    function_return_id += R_compare(y)[1]
+    
     match_predictions = winning_team(results)
     predictions += check_predictions(y, match_predictions)
 print("Program predicted results in ", round(((predictions / 380) * 100)), "%", "of matches")
+
 
 
 
