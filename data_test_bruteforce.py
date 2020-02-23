@@ -58,10 +58,37 @@ def ST_compare(match, val):
     else:
         return -val, "A"
 
+def Y_compare(match, val):
+    hometeam = match_list[match]['HY']
+    awayteam = match_list[match]['AY']
+
+    if hometeam > awayteam:
+        return val, "H"
+    
+    elif hometeam == awayteam:
+        return 0, "D"
+    
+    else:
+        return -val, "A"
+
+
+def R_compare(match, val):
+    hometeam = match_list[match]['HR']
+    awayteam = match_list[match]['AR']
+
+    if hometeam > awayteam:
+        return val, "H"
+    
+    elif hometeam == awayteam:
+        return 0, "D"
+    
+    else:
+        return -val, "A"
+
+
 
 
 def winning_team(team_score):
-    print(team_score)
     if team_score > 0:
         return "H"
     elif team_score < 0:
@@ -71,10 +98,8 @@ def winning_team(team_score):
 
 def check_predictions(match, results):
     if results == match_list[match]['FTR']:
-        print("Program was correct")
         return 1
     else:
-        print("Program was incorrect")
         return 0
 
 
@@ -82,24 +107,37 @@ money_earned = 0
 predictions = 0
 good_variables = []
 
-for x in range(1,51):
-    for z in range(1,51):
-        for b in range(1,51):
-            for y in match_list:
-                predictions = 0
-                results = HTG_compare(y, x)[0]
-                function_return_id = HTG_compare(y, x)[1]
-                results += ST_compare(y, z)[0]
-                function_return_id += ST_compare(y, z)[1]
-                results += S_compare(y, b)[0]
-                function_return_id += S_compare(y, b)[1]    
-                match_predictions = winning_team(results)
-                predictions += check_predictions(y, match_predictions)
-                print(x, z, b)
-            if round(((predictions / 380) * 100)) > 65:
-                print("Program predicted results in ", round(((predictions / 380) * 100)), "%", "of matches")
-                print("Variables were", x, z, b)
-                good_variables.append([y, x ,z]) 
+for x in range(1,21):
+    print((21-x), "loops left")
+    for z in range(1,21):
+        for b in range(1,21):
+            for i in range(1,21):
+                for n in range(1,21):
+                    predictions = 0
+                    for y in match_list:
+                        results = HTG_compare(y, x)[0]
+                        function_return_id = HTG_compare(y, x)[1]
+                        
+                        results += ST_compare(y, z)[0]
+                        function_return_id += ST_compare(y, z)[1]
+                        
+                        results += S_compare(y, b)[0]
+                        function_return_id += S_compare(y, b)[1]
+                       
+                        results += Y_compare(y, i)[0]
+                        function_return_id += S_compare(y, b)[1]
+                        
+                        results += R_compare(y, n)[0]
+                        function_return_id += S_compare(y, b)[1]       
+                        
+                        match_predictions = winning_team(results)
+                        predictions += check_predictions(y, match_predictions)
+
+                    if round(((predictions / 380) * 100)) > 70:
+                        print("Program predicted results in ", round(((predictions / 380) * 100)), "%", "of matches")
+                        print("Variables were", x, z, b)
+                        good_variables.append([y, x ,z]) 
+print("Program finished")
 print(good_variables)
                     
 
