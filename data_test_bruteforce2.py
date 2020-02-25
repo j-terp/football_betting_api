@@ -2,6 +2,7 @@ from get_data import dataset_to_dictionary, fetch_data, single_match
 from get_values import football_values
 import time
 start_time = time.time()
+
 """
 print(relevant_data)
 print(match_list)
@@ -78,7 +79,7 @@ def R_compare(match):
 
 
 def winning_team(team_score):
-    print(team_score)
+    
     if team_score > 0:
         return "H"
     elif team_score < 0:
@@ -88,33 +89,33 @@ def winning_team(team_score):
 
 def check_predictions(match, results):
     if results == match_list[match]['FTR']:
-        print("Program was correct")
+        
         return 1
     else:
-        print("Program was incorrect")
+        
         return 0
 
-def betting(match, results, points):
+def betting(match, results, points, value):
     money_bet = 100
-    if points > 1 or points < -1:
+    if points > (value/10) or points < (-value/10):
         if results == match_list[match]['FTR']:
             if results == "H":
-                return money_bet * match_list[match]['B365H'], 1, 1
+                return money_bet * match_list[match]['B365H'], 1
             elif results == 'D':
-                return money_bet * match_list[match]['B365D'], 1, 1
+                return money_bet * match_list[match]['B365D'], 1
             else:
-                return money_bet * match_list[match]['B365A'], 1, 1
+                return money_bet * match_list[match]['B365A'], 1
         else:
-            return -100, 1, 0
-    else: return 0, 0, 0
+            return -100, 1
+    else: return 0, 0
+
 
 file_list = ["E0_2005.csv", "E0_2006.csv", "E0_2007.csv", "E0_2008.csv", "E0_2009.csv", "E0_2010.csv", "E0_2011.csv", "E0_2012.csv", "E0_2013.csv", "E0_2014.csv", "football_data.csv"]
 
-if __name__ == "__main__":
-    money_earned = 0
+for value in range(22):
     predictions_correct = 0
+    money_earned = 0
     matches_bet = 0
-    matches_bet_correct = 0
     for file in file_list:
         relevant_data = fetch_data(file) # Hämtar data
 
@@ -122,7 +123,7 @@ if __name__ == "__main__":
         # match_list[index för matchens rad][target-data]
 
         row = single_match(0)
-        
+
         for y in match_list:
             results = HTG_compare(y)[0]
             function_return_id = HTG_compare(y)[1]
@@ -141,17 +142,15 @@ if __name__ == "__main__":
             
             match_predictions = winning_team(results)
             predictions_correct += check_predictions(y, match_predictions)
-            money_earned += betting(y, match_predictions, results)[0]
-            matches_bet += betting(y, match_predictions, results)[1]
-            matches_bet_correct += betting(y, match_predictions, results)[2]
-
-    print("Program predicted results in ", round(((predictions_correct / 4180) * 100)), "%", "of matches")
-    print("Program betted correctly in ", round(((matches_bet_correct / matches_bet) * 100)), "%", "of matches")
+            
+            money_earned += betting(y, match_predictions, results, value)[0]
+            matches_bet += betting(y, match_predictions, results, value)[1]
     print(money_earned, " kr earned")
     print((money_earned/matches_bet) - 100, " kr earned on average per match")
     print("Program bet on ", matches_bet, " matches")
-    print("--- %s seconds ---" % (time.time() - start_time))
+    print("Limit was: ", value)
 
 
 
 
+1
