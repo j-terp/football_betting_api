@@ -69,13 +69,13 @@ def Y_compare(values):
     awayteam = int(values[7])
 
     if hometeam > awayteam:
-        return football_values[3]
+        return -(football_values[3])
     
     elif hometeam == awayteam:
         return 0
     
     else:
-        return -(football_values[3])
+        return football_values[3]
 
 
 def R_compare(values):
@@ -83,18 +83,18 @@ def R_compare(values):
     awayteam = int(values[9])
     
     if hometeam > awayteam:
-        return football_values[4]
+        return -(football_values[4])
     
     elif hometeam == awayteam:
         return 0
     
     else:
-        return -(football_values[4])
+        return football_values[4]
 
 
 def winning_team(team_score):
     print(team_score)
-    if team_score > 1 or team_score < -1:
+    if team_score > 1.2 or team_score < -1.2:
         if team_score > 0:
             print("You should bet for H")
         elif team_score < 0:

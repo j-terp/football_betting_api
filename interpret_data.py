@@ -54,13 +54,13 @@ def Y_compare(match):
     awayteam = match_list[match]['AY']
 
     if hometeam > awayteam:
-        return football_values[3], "H"
+        return -football_values[3], "A"
     
     elif hometeam == awayteam:
         return 0, "D"
     
     else:
-        return -(football_values[3]), "A"
+        return football_values[3], "H"
 
 
 def R_compare(match):
@@ -68,13 +68,13 @@ def R_compare(match):
     awayteam = match_list[match]['AR']
 
     if hometeam > awayteam:
-        return football_values[4], "H"
+        return -(football_values[4]), "A"
     
     elif hometeam == awayteam:
         return 0, "D"
     
     else:
-        return -(football_values[4]), "A"
+        return football_values[4], "H"
 
 
 def winning_team(team_score):
@@ -96,7 +96,7 @@ def check_predictions(match, results):
 
 def betting(match, results, points):
     money_bet = 100
-    if points > 1 or points < -1:
+    if points > 1.2 or points < -1.2:
         if results == match_list[match]['FTR']:
             if results == "H":
                 return money_bet * match_list[match]['B365H'], 1, 1

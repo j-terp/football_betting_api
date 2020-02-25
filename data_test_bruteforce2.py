@@ -55,13 +55,13 @@ def Y_compare(match):
     awayteam = match_list[match]['AY']
 
     if hometeam > awayteam:
-        return football_values[3], "H"
+        return -(football_values[3]), "A"
     
     elif hometeam == awayteam:
         return 0, "D"
     
     else:
-        return -(football_values[3]), "A"
+        return football_values[3], "H"
 
 
 def R_compare(match):
@@ -69,13 +69,13 @@ def R_compare(match):
     awayteam = match_list[match]['AR']
 
     if hometeam > awayteam:
-        return football_values[4], "H"
+        return -(football_values[4]), "A"
     
     elif hometeam == awayteam:
         return 0, "D"
     
     else:
-        return -(football_values[4]), "A"
+        return football_values[4], "H"
 
 
 def winning_team(team_score):

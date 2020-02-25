@@ -3,7 +3,7 @@ from get_values import football_values
 import time
 start_time = time.time()
 
-relevant_data = fetch_data() # Hämtar data
+relevant_data = fetch_data("football_data.csv") # Hämtar data
 
 match_list = dataset_to_dictionary(relevant_data) # Konverterar datan till dictionary
 # match_list[index för matchens rad][target-data]
@@ -63,13 +63,13 @@ def Y_compare(match, val):
     awayteam = match_list[match]['AY']
 
     if hometeam > awayteam:
-        return val, "H"
+        return -val, "A"
     
     elif hometeam == awayteam:
         return 0, "D"
     
     else:
-        return -val, "A"
+        return val, "H"
 
 
 def R_compare(match, val):
@@ -77,13 +77,13 @@ def R_compare(match, val):
     awayteam = match_list[match]['AR']
 
     if hometeam > awayteam:
-        return val, "H"
+        return -val, "A"
     
     elif hometeam == awayteam:
         return 0, "D"
     
     else:
-        return -val, "A"
+        return val, "H"
 
 
 
