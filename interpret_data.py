@@ -96,14 +96,14 @@ def check_predictions(match, results):
 
 def betting(match, results, points):
     money_bet = 100
-    if points > 1.2 or points < -1.2:
+    if points > 1.1 or points < -1.1:
         if results == match_list[match]['FTR']:
             if results == "H":
-                return money_bet * match_list[match]['B365H'], 1, 1
+                return money_bet * match_list[match]['B365H'] - 100, 1, 1
             elif results == 'D':
-                return money_bet * match_list[match]['B365D'], 1, 1
+                return money_bet * match_list[match]['B365D'] - 100, 1, 1
             else:
-                return money_bet * match_list[match]['B365A'], 1, 1
+                return money_bet * match_list[match]['B365A'] - 100, 1, 1
         else:
             return -100, 1, 0
     else: return 0, 0, 0
@@ -148,7 +148,7 @@ if __name__ == "__main__":
     print("Program predicted results in ", round(((predictions_correct / 4180) * 100)), "%", "of matches")
     print("Program betted correctly in ", round(((matches_bet_correct / matches_bet) * 100)), "%", "of matches")
     print(money_earned, " kr earned")
-    print((money_earned/matches_bet) - 100, " kr earned on average per match")
+    print((money_earned/matches_bet), " kr earned on average per match")
     print("Program bet on ", matches_bet, " matches")
     print("--- %s seconds ---" % (time.time() - start_time))
 

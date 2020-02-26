@@ -100,11 +100,11 @@ def betting(match, results, points, value):
     if points > (value/10) or points < (-value/10):
         if results == match_list[match]['FTR']:
             if results == "H":
-                return money_bet * match_list[match]['B365H'], 1
+                return money_bet * match_list[match]['B365H'] - 100, 1
             elif results == 'D':
-                return money_bet * match_list[match]['B365D'], 1
+                return money_bet * match_list[match]['B365D'] - 100, 1
             else:
-                return money_bet * match_list[match]['B365A'], 1
+                return money_bet * match_list[match]['B365A'] - 100, 1
         else:
             return -100, 1
     else: return 0, 0
@@ -146,7 +146,7 @@ for value in range(22):
             money_earned += betting(y, match_predictions, results, value)[0]
             matches_bet += betting(y, match_predictions, results, value)[1]
     print(money_earned, " kr earned")
-    print((money_earned/matches_bet) - 100, " kr earned on average per match")
+    print((money_earned/matches_bet), " kr earned on average per match")
     print("Program bet on ", matches_bet, " matches")
     print("Limit was: ", value)
 
