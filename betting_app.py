@@ -24,18 +24,42 @@ def get_input():
     
 
 
+
 def HTG_compare(values):
     hometeam = int(values[0])
     awayteam = int(values[1])
 
     if hometeam > awayteam:
-        return football_values[0]
+        if (hometeam - awayteam) == 1:
+            return (football_values[0])
+            
+        elif (hometeam - awayteam) == 2:
+            return (football_values[0] * 1.2)
+            
+        elif (hometeam - awayteam) == 3:
+            return (football_values[0] * 1.5)
+            
+        else:
+            return (football_values[0] * 2)       
     
+    elif awayteam > hometeam:
+        if (awayteam - hometeam) == 1:
+            return -(football_values[0])
+            
+        elif (awayteam - hometeam) == 2:
+            return -(football_values[0] * 1.2)
+            
+        elif (awayteam - hometeam) == 3:
+            return -(football_values[0] * 1.5)
+            
+        else:
+            return -(football_values[0] * 2)
+
     elif hometeam == awayteam:
         return 0
     
     else:
-        return -(football_values[0])
+        print("Error")
 
 
 def S_compare(values):
@@ -117,7 +141,6 @@ if __name__ == "__main__":
     results = HTG_compare(values)
             
     results += ST_compare(values)
-
             
     results += S_compare(values)
 

@@ -10,22 +10,44 @@ print(row)
 
 
 def HTG_compare(match):
-    hometeam = match_list[match]['HTHG']
-    awayteam = match_list[match]['HTAG']
+    hometeam = int(match_list[match]['HTHG'])
+    awayteam = int(match_list[match]['HTAG'])
 
     if hometeam > awayteam:
-        return football_values[0], "H"
+        if (hometeam - awayteam) == 1:
+            return (football_values[0]), "H"
+            
+        elif (hometeam - awayteam) == 2:
+            return (football_values[0] * 1.2), "H"
+            
+        elif (hometeam - awayteam) == 3:
+            return (football_values[0] * 1.5), "H"
+            
+        else:
+            return (football_values[0] * 2), "H"       
     
+    elif awayteam > hometeam:
+        if (awayteam - hometeam) == 1:
+            return -(football_values[0]), "A"
+            
+        elif (awayteam - hometeam) == 2:
+            return -(football_values[0] * 1.2), "A"
+            
+        elif (awayteam - hometeam) == 3:
+            return -(football_values[0] * 1.5), "A"
+            
+        else:
+            return -(football_values[0] * 2), "A"
+
     elif hometeam == awayteam:
         return 0, "D"
     
     else:
-        return -(football_values[0]), "A"
-
+        print("Error")
 
 def S_compare(match):
-    hometeam = match_list[match]['HS']
-    awayteam = match_list[match]['AS']
+    hometeam = int(match_list[match]['HS'])
+    awayteam =int(match_list[match]['AS'])
 
     if hometeam > awayteam:
         return football_values[1], "H"
@@ -37,8 +59,8 @@ def S_compare(match):
         return -(football_values[1]), "A"
 
 def ST_compare(match):
-    hometeam = match_list[match]['HST']
-    awayteam = match_list[match]['AST']
+    hometeam = int(match_list[match]['HST'])
+    awayteam = int(match_list[match]['AST'])
 
     if hometeam > awayteam:
         return football_values[2], "H"
@@ -50,8 +72,8 @@ def ST_compare(match):
         return -(football_values[2]), "A"
 
 def Y_compare(match):
-    hometeam = match_list[match]['HY']
-    awayteam = match_list[match]['AY']
+    hometeam = int(match_list[match]['HY'])
+    awayteam = int(match_list[match]['AY'])
 
     if hometeam > awayteam:
         return -football_values[3], "A"
@@ -64,8 +86,8 @@ def Y_compare(match):
 
 
 def R_compare(match):
-    hometeam = match_list[match]['HR']
-    awayteam = match_list[match]['AR']
+    hometeam = int(match_list[match]['HR'])
+    awayteam = int(match_list[match]['AR'])
 
     if hometeam > awayteam:
         return -(football_values[4]), "A"
