@@ -100,7 +100,6 @@ def R_compare(match):
 
 
 def winning_team(team_score):
-    print(team_score)
     if team_score > 0:
         return "H"
     elif team_score < 0:
@@ -110,10 +109,8 @@ def winning_team(team_score):
 
 def check_predictions(match, results):
     if results == match_list[match]['FTR']:
-        print("Program was correct")
         return 1
     else:
-        print("Program was incorrect")
         return 0
 """
 def betting(match, results, points):
@@ -135,10 +132,10 @@ def betting(match, results, points):
     else: 
         return 0, 0, 0
 """
-def betting(match, results, points):
+def betting(match, results, points, val):
     money_bet = 100
     if results == "H":
-        if match_list[match]['B365H'] > 1.1:
+        if match_list[match]['B365H'] > (val/10):
             if results == match_list[match]['FTR']:
                 return money_bet * match_list[match]['B365H'] - 100, 1, 1
             else:
@@ -147,7 +144,7 @@ def betting(match, results, points):
             return 0, 0, 0
     
     elif results == 'D':
-        if match_list[match]['B365D'] > 1.1:
+        if match_list[match]['B365D'] > (val/10):
             if results == match_list[match]['FTR']:
                 return money_bet * match_list[match]['B365D'] - 100, 1, 1
             else:
@@ -156,7 +153,7 @@ def betting(match, results, points):
             return 0, 0, 0
     
     else:
-        if match_list[match]['B365A'] > 1.1:
+        if match_list[match]['B365A'] > (val/10):
             if results == match_list[match]['FTR']:
                 return money_bet * match_list[match]['B365A'] - 100, 1, 1
             else:
@@ -168,47 +165,48 @@ def betting(match, results, points):
 file_list = ["E0_2005.csv", "E0_2006.csv", "E0_2007.csv", "E0_2008.csv", "E0_2009.csv", "E0_2010.csv", "E0_2011.csv", "E0_2012.csv", "E0_2013.csv", "E0_2014.csv", "football_data.csv"]
 
 if __name__ == "__main__":
-    money_earned = 0
-    predictions_correct = 0
-    matches_bet = 0
-    matches_bet_correct = 0
-    for file in file_list:
-        relevant_data = fetch_data(file) # Hämtar data
+    for x in range(10, 50):   
+        money_earned = 0
+        predictions_correct = 0
+        matches_bet = 0
+        matches_bet_correct = 0
+        for file in file_list:
+            relevant_data = fetch_data(file) # Hämtar data
 
-        match_list = dataset_to_dictionary(relevant_data) # Konverterar datan till dictionary
-        # match_list[index för matchens rad][target-data]
+            match_list = dataset_to_dictionary(relevant_data) # Konverterar datan till dictionary
+            # match_list[index för matchens rad][target-data]
 
-        row = single_match(0)
-        
-        for y in match_list:
-            results = HTG_compare(y)[0]
-            function_return_id = HTG_compare(y)[1]
+            row = single_match(0)
             
-            results += ST_compare(y)[0]
-            function_return_id += ST_compare(y)[1]
-            
-            results += S_compare(y)[0]
-            function_return_id += S_compare(y)[1]
-            
-            results += Y_compare(y)[0]
-            function_return_id += Y_compare(y)[1]
-            
-            results += R_compare(y)[0]
-            function_return_id += R_compare(y)[1]
-            
-            match_predictions = winning_team(results)
-            predictions_correct += check_predictions(y, match_predictions)
-            money_earned += betting(y, match_predictions, results)[0]
-            matches_bet += betting(y, match_predictions, results)[1]
-            matches_bet_correct += betting(y, match_predictions, results)[2]
+            for y in match_list:
+                results = HTG_compare(y)[0]
+                function_return_id = HTG_compare(y)[1]
+                
+                results += ST_compare(y)[0]
+                function_return_id += ST_compare(y)[1]
+                
+                results += S_compare(y)[0]
+                function_return_id += S_compare(y)[1]
+                
+                results += Y_compare(y)[0]
+                function_return_id += Y_compare(y)[1]
+                
+                results += R_compare(y)[0]
+                function_return_id += R_compare(y)[1]
+                
+                match_predictions = winning_team(results)
+                predictions_correct += check_predictions(y, match_predictions)
+                money_earned += betting(y, match_predictions, results, x)[0]
+                matches_bet += betting(y, match_predictions, results, x)[1]
+                matches_bet_correct += betting(y, match_predictions, results, x)[2]
 
-    print("--- Program predicted results in ", round(((predictions_correct / 4180) * 100)), "%", "of matches ---")
-    print("--- Program betted correctly in ", round(((matches_bet_correct / matches_bet) * 100)), "%", "of matches ---")
-    print("---", money_earned, " kr earned ---")
-    print("---", (money_earned/matches_bet), " kr earned on average per match ---")
-    print("--- Program bet on ", matches_bet, " matches ---")
-    print("--- %s seconds ---" % (time.time() - start_time))
-
+        print("--- Program predicted results in ", round(((predictions_correct / 4180) * 100)), "%", "of matches ---")
+        print("--- Program betted correctly in ", round(((matches_bet_correct / matches_bet) * 100)), "%", "of matches ---")
+        print("---", money_earned, " kr earned ---")
+        print("---", (money_earned/matches_bet), " kr earned on average per match ---")
+        print("--- Program bet on ", matches_bet, " matches ---")
+        print("--- %s seconds ---" % (time.time() - start_time))
+        print("--- Odds limiter value was:", x, "---")
 
 
 

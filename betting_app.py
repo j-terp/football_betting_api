@@ -19,6 +19,9 @@ def get_input():
     values.append(input("Please enter yellow cards of away team: "))
     values.append(input("Please enter red cards of home team: "))
     values.append(input("Please enter red cards away team: "))
+    values.append(input("Please enter home team odds: "))
+    values.append(input("Please enter away team odds: "))
+    values.append(input("Please enter draw odds: "))
     return values
     
     
@@ -118,16 +121,32 @@ def R_compare(values):
 
 def winning_team(team_score):
     print(team_score)
-    if team_score > 1.2 or team_score < -1.2:
-        if team_score > 0:
+    if team_score > 0:
+        return "H"
+    elif team_score < 0:
+        return "A"
+    else:
+        return "D"
+
+def betting(prediction, values):
+    if prediction == "H":
+        if float(values[10]) > 1.1:
             print("You should bet for H")
-        elif team_score < 0:
+        else:
+            print("You should not bet")
+    
+    elif prediction == 'D':
+        if float(values[12]) > 1.1:
+            print("You should bet for D")
+        else:
+            print("You should not bet")
+    
+    else:
+        if float(values[11]) > 1.1:
             print("You should bet for A")
         else:
-            print("You should bet for D")
-    else:
-        print("You should not bet")
-
+            print("You should not bet")
+    
 
 
 if __name__ == "__main__":
@@ -150,4 +169,6 @@ if __name__ == "__main__":
             
     results += R_compare(values)
            
-    winning_team(results)
+    prediction = winning_team(results)
+
+    betting(prediction, values)
