@@ -1,4 +1,3 @@
-
 def get_values():
     f = open("football_values.txt", "r")
     values = (f.read())
