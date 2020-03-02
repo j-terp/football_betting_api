@@ -1,4 +1,4 @@
-from get_data import dataset_to_dictionary, fetch_data, single_match
+from get_data import dataset_to_dictionary, fetch_data, single_match, csv_fetch, csv_append, csv_return
 from get_values import football_values
 import time
 start_time = time.time()
@@ -172,6 +172,7 @@ if __name__ == "__main__":
     predictions_correct = 0
     matches_bet = 0
     matches_bet_correct = 0
+    match_function_return = []
     for file in file_list:
         relevant_data = fetch_data(file) # Hämtar data
 
@@ -182,20 +183,22 @@ if __name__ == "__main__":
         
         for y in match_list:
             results = HTG_compare(y)[0]
-            function_return_id = HTG_compare(y)[1]
+            function_return_id = [HTG_compare(y)[1]]
             
             results += ST_compare(y)[0]
-            function_return_id += ST_compare(y)[1]
+            function_return_id.append(ST_compare(y)[1])
             
             results += S_compare(y)[0]
-            function_return_id += S_compare(y)[1]
+            function_return_id.append(S_compare(y)[1])
             
             results += Y_compare(y)[0]
-            function_return_id += Y_compare(y)[1]
+            function_return_id.append(Y_compare(y)[1])
             
             results += R_compare(y)[0]
-            function_return_id += R_compare(y)[1]
+            function_return_id.append(R_compare(y)[1])
+            match_function_return.append(function_return_id)
             
+
             match_predictions = winning_team(results)
             predictions_correct += check_predictions(y, match_predictions)
             money_earned += betting(y, match_predictions, results)[0]
@@ -208,6 +211,9 @@ if __name__ == "__main__":
     print("---", (money_earned/matches_bet), " kr earned on average per match ---")
     print("--- Program bet on ", matches_bet, " matches ---")
     print("--- %s seconds ---" % (time.time() - start_time))
+    csv_return(csv_append(match_function_return))
+    
+    
 
 
 

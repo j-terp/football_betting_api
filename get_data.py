@@ -26,7 +26,7 @@ def csv_fetch():
 def csv_append(value_list):
     base_dictionary, base_keys = csv_fetch()
     #value_list = [["Volvo V70", 69420],["Saab", 39900]]
-    addition_point = len()
+    addition_point = len(base_dictionary)
     for x in value_list:
         temp_dict = {}
         for key in base_keys:
