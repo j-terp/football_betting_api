@@ -17,30 +17,28 @@ def single_match(index):
 
 def csv_fetch():
     fetched_dataframe = pd.read_csv(r'dataframe.csv')
-    dictionary_keys = []
-    for col in fetched_dataframe.columns:
-        dictionary_keys.append(col)
-    fetched_dictionary = pd.DataFrame(fetched_dataframe).to_dict('index')
-    return fetched_dictionary, dictionary_keys
+    return fetched_dataframe
 
 def csv_append(value_list):
-    base_dictionary, base_keys = csv_fetch()
-    #value_list = [["Volvo V70", 69420],["Saab", 39900]]
-    addition_point = len(base_dictionary)
-    for x in value_list:
-        temp_dict = {}
-        for key in base_keys:
-            temp_dict[key] = x[base_keys.index(key)]
-        base_dictionary[addition_point + value_list.index(x)] = temp_dict
-    return base_dictionary
+    base_dataframe = csv_fetch()
+    for value in value_list:
+        base_dataframe = base_dataframe.append(pd.DataFrame([value], columns=base_dataframe.columns), ignore_index=True)
+    return base_dataframe
 
-def csv_return(dictionary):
-    export_csv = pd.DataFrame.from_dict(dictionary, orient='index').to_csv(r'dataframe.csv', index = None, header=True) #Don't forget to add '.csv' at the end of the path
+def csv_return(dataframe):
+    export_csv = dataframe.to_csv(r'dataframe.csv', index = None, header=True) #Don't forget to add '.csv' at the end of the path
     return export_csv
 
 def csv_clean():
-    dictionary_keys = []
-    for col in pd.read_csv(r'dataframe.csv').columns:
-        dictionary_keys.append(col)
-    export_csv = pd.DataFrame(columns=dictionary_keys).to_csv(r'dataframe.csv', index = None, header=True)
+    base_dataframe = csv_fetch()
+    export_csv = pd.DataFrame(columns=base_dataframe.columns).to_csv(r'dataframe.csv', index = None, header=True)
     return export_csv
+
+def df_to_dict(dataframe):
+    fetched_dictionary = pd.DataFrame(dataframe).to_dict('index')
+    dictionary_keys = dataframe.columns
+    return fetched_dictionary, dictionary_keys
+
+def df_from_dict(dictionary):
+    export_dict = pd.DataFrame.from_dict(dictionary, orient='index')
+    return export_dict

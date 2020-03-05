@@ -1,4 +1,4 @@
-from get_data import dataset_to_dictionary, fetch_data, single_match, csv_fetch, csv_append, csv_return, csv_clean
+from get_data import dataset_to_dictionary, fetch_data, single_match, csv_fetch, csv_append, csv_return, csv_clean, df_from_dict, df_to_dict
 from get_values import football_values
 import time
 start_time = time.time()
@@ -171,8 +171,10 @@ if __name__ == "__main__":
     predictions_correct = 0
     matches_bet = 0
     matches_bet_correct = 0
-    match_function_return = []
+    csv_clean
     for file in file_list:
+        match_function_return = []
+        
         relevant_data = fetch_data(file) # Hämtar data
 
         match_list = dataset_to_dictionary(relevant_data) # Konverterar datan till dictionary
@@ -203,8 +205,8 @@ if __name__ == "__main__":
             money_earned += betting(y, match_predictions, results)[0]
             matches_bet += betting(y, match_predictions, results)[1]
             matches_bet_correct += betting(y, match_predictions, results)[2]
-
             
+        csv_return(csv_append(match_function_return))
 
     print("--- Program predicted results in ", round(((predictions_correct / 4180) * 100)), "%", "of matches ---")
     print("--- Program betted correctly in ", round(((matches_bet_correct / matches_bet) * 100)), "%", "of matches ---")
@@ -212,12 +214,3 @@ if __name__ == "__main__":
     print("---", (money_earned/matches_bet), " kr earned on average per match ---")
     print("--- Program bet on ", matches_bet, " matches ---")
     print("--- %s seconds ---" % (time.time() - start_time))
-    print(len(match_function_return))
-    exported_dictionary = csv_append(match_function_return)
-    print(len(exported_dictionary))
-    csv_return(exported_dictionary)
-    
-
-
-
-
