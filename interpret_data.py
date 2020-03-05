@@ -100,7 +100,7 @@ def R_compare(match):
 
 
 def winning_team(team_score):
-    print(team_score)
+
     if team_score > 0:
         return "H"
     elif team_score < 0:
@@ -110,10 +110,8 @@ def winning_team(team_score):
 
 def check_predictions(match, results):
     if results == match_list[match]['FTR']:
-        print("Program was correct")
         return 1
     else:
-        print("Program was incorrect")
         return 0
 """
 def betting(match, results, points):
@@ -181,7 +179,6 @@ if __name__ == "__main__":
         # match_list[index för matchens rad][target-data]
 
         row = single_match(0)
-        
         for y in match_list:
             results = HTG_compare(y)[0]
             function_return_id = [HTG_compare(y)[1]]
@@ -198,15 +195,16 @@ if __name__ == "__main__":
             results += R_compare(y)[0]
             function_return_id.append(R_compare(y)[1])
             function_return_id.append(match_list[y]['FTR'])
+            
             match_function_return.append(function_return_id)
            
-            
-
             match_predictions = winning_team(results)
             predictions_correct += check_predictions(y, match_predictions)
             money_earned += betting(y, match_predictions, results)[0]
             matches_bet += betting(y, match_predictions, results)[1]
             matches_bet_correct += betting(y, match_predictions, results)[2]
+
+            
 
     print("--- Program predicted results in ", round(((predictions_correct / 4180) * 100)), "%", "of matches ---")
     print("--- Program betted correctly in ", round(((matches_bet_correct / matches_bet) * 100)), "%", "of matches ---")
@@ -214,8 +212,10 @@ if __name__ == "__main__":
     print("---", (money_earned/matches_bet), " kr earned on average per match ---")
     print("--- Program bet on ", matches_bet, " matches ---")
     print("--- %s seconds ---" % (time.time() - start_time))
-    csv_return(csv_append(match_function_return))
-
+    print(len(match_function_return))
+    exported_dictionary = csv_append(match_function_return)
+    print(len(exported_dictionary))
+    csv_return(exported_dictionary)
     
 
 
