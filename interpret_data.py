@@ -196,7 +196,9 @@ if __name__ == "__main__":
             
             results += R_compare(y)[0]
             function_return_id.append(R_compare(y)[1])
+            function_return_id.append(match_list[y]['FTR'])
             match_function_return.append(function_return_id)
+           
             
 
             match_predictions = winning_team(results)
@@ -212,7 +214,7 @@ if __name__ == "__main__":
     print("--- Program bet on ", matches_bet, " matches ---")
     print("--- %s seconds ---" % (time.time() - start_time))
     csv_return(csv_append(match_function_return))
-    
+
     
 
 
