@@ -43,3 +43,4 @@ def csv_clean():
     for col in pd.read_csv(r'dataframe.csv').columns:
         dictionary_keys.append(col)
     export_csv = pd.DataFrame(columns=dictionary_keys).to_csv(r'dataframe.csv', index = None, header=True)
+    return export_csv

@@ -1,4 +1,4 @@
-from get_data import dataset_to_dictionary, fetch_data, single_match, csv_fetch, csv_append, csv_return
+from get_data import dataset_to_dictionary, fetch_data, single_match, csv_fetch, csv_append, csv_return, csv_clean
 from get_values import football_values
 import time
 start_time = time.time()
@@ -168,6 +168,7 @@ def betting(match, results, points):
 file_list = ["E0_2005.csv", "E0_2006.csv", "E0_2007.csv", "E0_2008.csv", "E0_2009.csv", "E0_2010.csv", "E0_2011.csv", "E0_2012.csv", "E0_2013.csv", "E0_2014.csv", "football_data.csv"]
 
 if __name__ == "__main__":
+    csv_clean()
     money_earned = 0
     predictions_correct = 0
     matches_bet = 0
