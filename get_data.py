@@ -35,7 +35,11 @@ def csv_append(value_list):
     return base_dictionary
 
 def csv_return(dictionary):
-    export_dictionary = pd.DataFrame.from_dict(dictionary, orient='index')
-    export_csv = export_dictionary.to_csv(r'dataframe.csv', index = None, header=True) #Don't forget to add '.csv' at the end of the path
+    export_csv = pd.DataFrame.from_dict(dictionary, orient='index').to_csv(r'dataframe.csv', index = None, header=True) #Don't forget to add '.csv' at the end of the path
     return export_csv
 
+def csv_clean():
+    dictionary_keys = []
+    for col in pd.read_csv(r'dataframe.csv').columns:
+        dictionary_keys.append(col)
+    export_csv = pd.DataFrame(columns=dictionary_keys).to_csv(r'dataframe.csv', index = None, header=True)
