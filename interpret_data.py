@@ -1,13 +1,7 @@
 from get_data import dataset_to_dictionary, fetch_data, single_match, csv_fetch, csv_append, csv_return, csv_clean, df_from_dict, df_to_dict
 from get_values import football_values
+from evaluate import main_eval
 import time
-start_time = time.time()
-"""
-print(relevant_data)
-print(match_list)
-print(row)
-"""
-
 
 def HTG_compare(match):
     hometeam = int(match_list[match]['HTHG'])
@@ -166,51 +160,53 @@ def betting(match, results, points):
 file_list = ["E0_2005.csv", "E0_2006.csv", "E0_2007.csv", "E0_2008.csv", "E0_2009.csv", "E0_2010.csv", "E0_2011.csv", "E0_2012.csv", "E0_2013.csv", "E0_2014.csv", "football_data.csv"]
 
 if __name__ == "__main__":
-    csv_clean()
-    money_earned = 0
-    predictions_correct = 0
-    matches_bet = 0
-    matches_bet_correct = 0
-    csv_clean
-    for file in file_list:
-        match_function_return = []
-        
-        relevant_data = fetch_data(file) # Hämtar data
+    for _ in range(2000):
+        start_time = time.time()
+        csv_clean()
+        money_earned = 0
+        predictions_correct = 0
+        matches_bet = 0
+        matches_bet_correct = 0
+        csv_clean
+        for file in file_list:
+            match_function_return = []
+            
+            relevant_data = fetch_data(file) # Hämtar data
 
-        match_list = dataset_to_dictionary(relevant_data) # Konverterar datan till dictionary
-        # match_list[index för matchens rad][target-data]
+            match_list = dataset_to_dictionary(relevant_data) # Konverterar datan till dictionary
+            # match_list[index för matchens rad][target-data]
 
-        row = single_match(0)
-        for y in match_list:
-            results = HTG_compare(y)[0]
-            function_return_id = [HTG_compare(y)[1]]
+            row = single_match(0)
+            for y in match_list:
+                results = HTG_compare(y)[0]
+                function_return_id = [HTG_compare(y)[1]]
+                
+                results += ST_compare(y)[0]
+                function_return_id.append(ST_compare(y)[1])
+                
+                results += S_compare(y)[0]
+                function_return_id.append(S_compare(y)[1])
+                
+                results += Y_compare(y)[0]
+                function_return_id.append(Y_compare(y)[1])
+                
+                results += R_compare(y)[0]
+                function_return_id.append(R_compare(y)[1])
+                function_return_id.append(match_list[y]['FTR'])
+                
+                match_function_return.append(function_return_id)
             
-            results += ST_compare(y)[0]
-            function_return_id.append(ST_compare(y)[1])
-            
-            results += S_compare(y)[0]
-            function_return_id.append(S_compare(y)[1])
-            
-            results += Y_compare(y)[0]
-            function_return_id.append(Y_compare(y)[1])
-            
-            results += R_compare(y)[0]
-            function_return_id.append(R_compare(y)[1])
-            function_return_id.append(match_list[y]['FTR'])
-            
-            match_function_return.append(function_return_id)
-           
-            match_predictions = winning_team(results)
-            predictions_correct += check_predictions(y, match_predictions)
-            money_earned += betting(y, match_predictions, results)[0]
-            matches_bet += betting(y, match_predictions, results)[1]
-            matches_bet_correct += betting(y, match_predictions, results)[2]
-            
-        csv_return(csv_append(match_function_return))
-
-    print("--- Program predicted results in ", round(((predictions_correct / 4180) * 100)), "%", "of matches ---")
-    print("--- Program betted correctly in ", round(((matches_bet_correct / matches_bet) * 100)), "%", "of matches ---")
-    print("---", money_earned, " kr earned ---")
-    print("---", (money_earned/matches_bet), " kr earned on average per match ---")
-    print("--- Program bet on ", matches_bet, " matches ---")
+                match_predictions = winning_team(results)
+                predictions_correct += check_predictions(y, match_predictions)
+                money_earned += betting(y, match_predictions, results)[0]
+                matches_bet += betting(y, match_predictions, results)[1]
+                matches_bet_correct += betting(y, match_predictions, results)[2]
+                
+            csv_return(csv_append(match_function_return))
+        main_eval()
+        print("--- Program predicted results in ", round(((predictions_correct / 4180) * 100)), "%", "of matches ---")
+        print("--- Program betted correctly in ", round(((matches_bet_correct / matches_bet) * 100)), "%", "of matches ---")
+        print("---", money_earned, " kr earned ---")
+        print("---", (money_earned/matches_bet), " kr earned on average per match ---")
+        print("--- Program bet on ", matches_bet, " matches ---")
     print("--- %s seconds ---" % (time.time() - start_time))
