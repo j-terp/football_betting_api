@@ -43,7 +43,12 @@ def main_eval():
         football_values[2] += evalST(base_dictionary, match)
         football_values[3] += evalY(base_dictionary, match)
         football_values[4] += evalR(base_dictionary, match)
-
+        for y in range(5):
+            if football_values[y] < 0:
+                football_values[y] = 0
+            else:
+                pass
+    
     temp = str(football_values)
     temp = temp[1:-1]
     print(temp)
