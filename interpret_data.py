@@ -160,14 +160,13 @@ def betting(match, results, points):
 file_list = ["E0_2005.csv", "E0_2006.csv", "E0_2007.csv", "E0_2008.csv", "E0_2009.csv", "E0_2010.csv", "E0_2011.csv", "E0_2012.csv", "E0_2013.csv", "E0_2014.csv", "football_data.csv"]
 
 if __name__ == "__main__":
+    start_time = time.time()
     for _ in range(2000):
-        start_time = time.time()
         csv_clean()
         money_earned = 0
         predictions_correct = 0
         matches_bet = 0
         matches_bet_correct = 0
-        csv_clean
         for file in file_list:
             match_function_return = []
             
