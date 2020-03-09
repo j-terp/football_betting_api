@@ -3,35 +3,49 @@ import pandas as pd
 from get_values import football_values
 
 def evalHTG(prediction, match):
-    if prediction[match]["HTG"] == prediction[match]["FTR"]:
-        return 0.000001
+    if prediction[match]["PR"] != prediction[match]["FTR"]:
+        if prediction[match]["HTG"] == prediction[match]["FTR"]:
+            return 0.000001
+        else:
+            return -0.000001
     else:
-        return -0.000001
+        return 0
 
 def evalS(prediction, match):
-    if prediction[match]["S"] == prediction[match]["FTR"]:
-        return 0.000001
+    if prediction[match]["PR"] != prediction[match]["FTR"]:
+        if prediction[match]["S"] == prediction[match]["FTR"]:
+            return 0.000001
+        else:
+            return -0.000001
     else:
-        return -0.000001
+        return 0
 
 def evalST(prediction, match):
-    if prediction[match]["ST"] == prediction[match]["FTR"]:
-        return 0.000001
+    if prediction[match]["PR"] != prediction[match]["FTR"]:
+        if prediction[match]["ST"] == prediction[match]["FTR"]:
+            return 0.000001
+        else:
+            return -0.000001
     else:
-        return -0.000001
+        return 0
 
 def evalY(prediction, match):
-    if prediction[match]["Y"] == prediction[match]["FTR"]:
-        return 0.000001
+    if prediction[match]["PR"] != prediction[match]["FTR"]:
+        if prediction[match]["Y"] == prediction[match]["FTR"]:
+            return 0.000001
+        else:
+            return -0.000001
     else:
-        return -0.000001
+        return 0
 
 def evalR(prediction, match):
-    if prediction[match]["R"] == prediction[match]["FTR"]:
-        return 0.000001
+    if prediction[match]["PR"] != prediction[match]["FTR"]:
+        if prediction[match]["R"] == prediction[match]["FTR"]:
+            return 0.000001
+        else:
+            return -0.000001
     else:
-        return -0.000001
-
+        return 0
 
 
 def main_eval():

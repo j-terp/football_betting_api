@@ -193,9 +193,11 @@ if __name__ == "__main__":
                 function_return_id.append(R_compare(y)[1])
                 function_return_id.append(match_list[y]['FTR'])
                 
-                match_function_return.append(function_return_id)
+                
             
                 match_predictions = winning_team(results)
+                function_return_id.append(winning_team(results))
+                match_function_return.append(function_return_id)
                 predictions_correct += check_predictions(y, match_predictions)
                 money_earned += betting(y, match_predictions, results)[0]
                 matches_bet += betting(y, match_predictions, results)[1]
