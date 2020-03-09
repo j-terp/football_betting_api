@@ -44,53 +44,150 @@ def S_compare(match):
     awayteam =int(match_list[match]['AS'])
 
     if hometeam > awayteam:
-        return football_values[1], "H"
+        if (hometeam - awayteam) < 3:
+            return (football_values[1]), "H"
+            
+        elif (hometeam - awayteam) < 5:
+            return (football_values[1] * 1.2), "H"
+            
+        elif (hometeam - awayteam) < 7:
+            return (football_values[1] * 1.5), "H"
+            
+        else:
+            return (football_values[1] * 2), "H"       
     
+    elif awayteam > hometeam:
+        if (awayteam - hometeam) < 3:
+            return -(football_values[1]), "A"
+            
+        elif (awayteam - hometeam) < 5:
+            return -(football_values[1] * 1.2), "A"
+            
+        elif (awayteam - hometeam) < 7:
+            return -(football_values[1] * 1.5), "A"
+            
+        else:
+            return -(football_values[1] * 2), "A"
+
     elif hometeam == awayteam:
         return 0, "D"
     
     else:
-        return -(football_values[1]), "A"
+        print("Error")
 
 def ST_compare(match):
     hometeam = int(match_list[match]['HST'])
     awayteam = int(match_list[match]['AST'])
 
     if hometeam > awayteam:
-        return football_values[2], "H"
+        if (hometeam - awayteam) < 3:
+            return (football_values[2]), "H"
+            
+        elif (hometeam - awayteam) < 5:
+            return (football_values[2] * 1.2), "H"
+            
+        elif (hometeam - awayteam) < 7:
+            return (football_values[2] * 1.5), "H"
+            
+        else:
+            return (football_values[2] * 2), "H"       
     
+    elif awayteam > hometeam:
+        if (awayteam - hometeam) < 3:
+            return -(football_values[2]), "A"
+            
+        elif (awayteam - hometeam) < 5:
+            return -(football_values[2] * 1.2), "A"
+            
+        elif (awayteam - hometeam) < 7:
+            return -(football_values[2] * 1.5), "A"
+            
+        else:
+            return -(football_values[2] * 2), "A"
+
     elif hometeam == awayteam:
         return 0, "D"
     
     else:
-        return -(football_values[2]), "A"
+        print("Error")
 
 def Y_compare(match):
     hometeam = int(match_list[match]['HY'])
     awayteam = int(match_list[match]['AY'])
 
+
     if hometeam > awayteam:
-        return -football_values[3], "A"
+        if (hometeam - awayteam) < 3:
+            return -(football_values[3]), "A"
+            
+        elif (hometeam - awayteam) < 5:
+            return -(football_values[3] * 1.2), "A"
+            
+        elif (hometeam - awayteam) < 7:
+            return -(football_values[3] * 1.5), "A"
+            
+        else:
+            return -(football_values[3] * 2), "A"       
     
+    elif awayteam > hometeam:
+        if (awayteam - hometeam) < 3:
+            return (football_values[3]), "H"
+            
+        elif (awayteam - hometeam) < 5:
+            return (football_values[3] * 1.2), "H"
+            
+        elif (awayteam - hometeam) < 7:
+            return (football_values[3] * 1.5), "H"
+            
+        else:
+            return (football_values[3] * 2), "H"
+
     elif hometeam == awayteam:
         return 0, "D"
     
     else:
-        return football_values[3], "H"
+        print("Error")
+    
 
 
 def R_compare(match):
     hometeam = int(match_list[match]['HR'])
     awayteam = int(match_list[match]['AR'])
 
+
     if hometeam > awayteam:
-        return -(football_values[4]), "A"
+        if (hometeam - awayteam) < 2:
+            return -(football_values[4]), "A"
+            
+        elif (hometeam - awayteam) < 3:
+            return -(football_values[4] * 1.2), "A"
+            
+        elif (hometeam - awayteam) < 4:
+            return -(football_values[4] * 1.5), "A"
+            
+        else:
+            return -(football_values[4] * 2), "A"       
     
+    elif awayteam > hometeam:
+        if (awayteam - hometeam) < 2:
+            return (football_values[4]), "H"
+            
+        elif (awayteam - hometeam) < 3:
+            return (football_values[4] * 1.2), "H"
+            
+        elif (awayteam - hometeam) < 4:
+            return (football_values[4] * 1.5), "H"
+            
+        else:
+            return (football_values[4] * 2), "H"
+
     elif hometeam == awayteam:
         return 0, "D"
     
     else:
-        return football_values[4], "H"
+        print("Error")
+    
+    
 
 
 def winning_team(team_score):
