@@ -8,24 +8,49 @@ from selenium.webdriver.chrome.service import Service
 service = Service(r'C:/webdrivers/chromedriver.exe')
 service.start()
 driver = webdriver.Remote(service.service_url)
+
 driver.get("https://www.flashscore.com/")
+time.sleep(2)
+driver.find_element_by_xpath("""//*[@id="live-table"]/div[1]/div/div[2]""").click()
+
 content = driver.page_source
 soup = BeautifulSoup(content, features="html.parser")
+matches_raw = soup.find_all('div', class_='event__match' )
+match_id = []
+for tag in matches_raw:
+    match_id.append(tag.get("id"))
+
+print(match_id)
+for match in match_id:
+    time.sleep(2)
+    match_url = "https://www.flashscore.com/match/" + match[4:] + "/#match-summary"
+    driver.get(match_url)
+    driver.find_element_by_xpath("""//*[@id="live-table"]/div[1]/div/div[2]""").click()
+    info = driver.page_source
+    print(info)
+    
+
 """
 print(soup)
 """
 
-driver.find_element_by_xpath("""//*[@id="live-table"]/div[1]/div/div[2]""").click()
 
-titles_element = driver.find_elements_by_xpath("""/html/body/div[6]/div[1]/div/div[1]/div[2]/div[4]/div[2]/div[2]/div/div/div[2]/div[6]""")
+
+#titles_element = driver.find_elements_by_xpath("""/html/body/div[6]/div[1]/div/div[1]/div[2]/div[4]/div[2]/div[2]/div/div/div[2]/div[6]""")
 """
 print(titles_element)
 """
-table = driver.find_elements_by_class_name("container__fsbody")
+
+#table = driver.find_elements_by_class_name("container__fsbody")
+"""
+table = driver.find_elements_by_class_name("leagues--live")
 for thing in table:
     print(thing.text)
     print()
-#print(table)
+print(table)
+
+driver.find_element_by_id("g_1_UcwN50ef").click()
+"""
 time.sleep(5)
 driver.quit()
 
