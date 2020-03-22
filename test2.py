@@ -8,21 +8,39 @@ from selenium.webdriver.chrome.service import Service
 service = Service(r'C:/webdrivers/chromedriver.exe')
 service.start()
 driver = webdriver.Remote(service.service_url)
-products=[] #List to store name of the product
-prices=[] #List to store price of the product
-ratings=[] #List to store rating of the product
-driver.get("https://www.flashscore.se/")
+driver.get("https://www.flashscore.com/")
 content = driver.page_source
 soup = BeautifulSoup(content, features="html.parser")
+"""
+print(soup)
+"""
+
+driver.find_element_by_xpath("""//*[@id="live-table"]/div[1]/div/div[2]""").click()
+
+titles_element = driver.find_elements_by_xpath("""/html/body/div[6]/div[1]/div/div[1]/div[2]/div[4]/div[2]/div[2]/div/div/div[2]/div[6]""")
+"""
+print(titles_element)
+"""
+table = driver.find_elements_by_class_name("container__fsbody")
+for thing in table:
+    print(thing.text)
+    print()
+#print(table)
+time.sleep(5)
+driver.quit()
+
+
+"""
 for a in soup.findAll('a',href=True, attrs={'class':"container__liveTableWrapper sport_page"}):
-    name=a.find('div', attrs={'class':'_3wU53n'})
-    price=a.find('div', attrs={'class':'_1vC4OE _2rQ-NK'})
-    rating=a.find('div', attrs={'class':'hGSR34 _2beYZw'})
+    name = a.find('div', attrs={'class':'_3wU53n'})
+    price = a.find('div', attrs={'class':'_1vC4OE _2rQ-NK'})
+    rating = a.find('div', attrs={'class':'hGSR34 _2beYZw'})
     products.append(name.text)
     prices.append(price.text)
     ratings.append(rating.text) 
 
-
+print(products)
+"""
 
 """
 time.sleep(5) # Let the user actually see something!
