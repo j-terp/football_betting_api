@@ -1,36 +1,18 @@
-from get_data import dataset_to_dictionary, fetch_data, single_match
-from get_values import football_values
+
+from bs4 import BeautifulSoup
+import pandas as pd
 import time
-start_time = time.time()
-"""
-print(relevant_data)
-print(match_list)
-print(row)
-"""
-def get_input():
-    values = []
-    values.append(input("Please enter goals of home team: "))
-    values.append(input("Please enter goals of away team: "))
-    values.append(input("Please enter shots of home team: "))
-    values.append(input("Please enter shots of away team: "))
-    values.append(input("Please enter shots on target of home team: "))
-    values.append(input("Please enter shots on target of away team: "))
-    values.append(input("Please enter yellow cards of home team: "))
-    values.append(input("Please enter yellow cards of away team: "))
-    values.append(input("Please enter red cards of home team: "))
-    values.append(input("Please enter red cards away team: "))
-    values.append(input("Please enter home team odds: "))
-    values.append(input("Please enter away team odds: "))
-    values.append(input("Please enter draw odds: "))
-    return values
-    
-    
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from get_values import football_values
 
+service = Service(r'C:/webdrivers/chromedriver.exe')
+service.start()
+driver = webdriver.Remote(service.service_url)
 
-
-def HTG_compare(values):
-    hometeam = int(values[0])
-    awayteam = int(values[1])
+def HTG_compare(value):
+    hometeam = int(value[1])
+    awayteam = int(value[2])
 
     if hometeam > awayteam:
         if (hometeam - awayteam) == 1:
@@ -43,7 +25,7 @@ def HTG_compare(values):
             return (football_values[0] * 1.5)
             
         else:
-            return (football_values[0] * 2)       
+            return (football_values[0] * 2)      
     
     elif awayteam > hometeam:
         if (awayteam - hometeam) == 1:
@@ -64,63 +46,163 @@ def HTG_compare(values):
     else:
         print("Error")
 
-
-def S_compare(values):
-    hometeam = int(values[2])
-    awayteam = int(values[3])
+def S_compare(value):
+    hometeam = (int(value['Shots on Goal'][0]) + int(value["Shots off Goal"][0]))
+    awayteam = (int(value['Shots on Goal'][1]) + int(value["Shots off Goal"][1]))
 
     if hometeam > awayteam:
-        return football_values[1]
+        if (hometeam - awayteam) < 3:
+            return (football_values[1])
+            
+        elif (hometeam - awayteam) < 5:
+            return (football_values[1] * 1.2)
+            
+        elif (hometeam - awayteam) < 7:
+            return (football_values[1] * 1.5)
+            
+        else:
+            return (football_values[1])    
     
+    elif awayteam > hometeam:
+        if (awayteam - hometeam) < 3:
+            return -(football_values[1])
+            
+        elif (awayteam - hometeam) < 5:
+            return -(football_values[1] * 1.2)
+            
+        elif (awayteam - hometeam) < 7:
+            return -(football_values[1] * 1.5)
+            
+        else:
+            return -(football_values[1] * 2)
+
     elif hometeam == awayteam:
         return 0
     
     else:
-        return -(football_values[1])
+        print("Error")
 
-def ST_compare(values):
-    hometeam = int(values[4])
-    awayteam = int(values[5])
+def ST_compare(value):
+    hometeam = int(value['Shots on Goal'][0])
+    awayteam = int(value['Shots on Goal'][1])
 
     if hometeam > awayteam:
-        return football_values[2]
+        if (hometeam - awayteam) < 3:
+            return (football_values[2])
+            
+        elif (hometeam - awayteam) < 5:
+            return (football_values[2] * 1.2)
+            
+        elif (hometeam - awayteam) < 7:
+            return (football_values[2] * 1.5)
+            
+        else:
+            return (football_values[2] * 2)      
     
+    elif awayteam > hometeam:
+        if (awayteam - hometeam) < 3:
+            return -(football_values[2])
+            
+        elif (awayteam - hometeam) < 5:
+            return -(football_values[2] * 1.2)
+            
+        elif (awayteam - hometeam) < 7:
+            return -(football_values[2] * 1.5)
+            
+        else:
+            return -(football_values[2] * 2)
+
     elif hometeam == awayteam:
         return 0
     
     else:
-        return -(football_values[2])
+        print("Error")
 
-def Y_compare(values):
-    hometeam = int(values[6])
-    awayteam = int(values[7])
+def Y_compare(value):
+    hometeam = int(value['Yellow Cards'][0]) 
+    awayteam = int(value['Yellow Cards'][1])
+
 
     if hometeam > awayteam:
-        return -(football_values[3])
+        if (hometeam - awayteam) < 3:
+            return -(football_values[3])
+            
+        elif (hometeam - awayteam) < 5:
+            return -(football_values[3] * 1.2)
+            
+        elif (hometeam - awayteam) < 7:
+            return -(football_values[3] * 1.5)
+            
+        else:
+            return -(football_values[3])      
     
+    elif awayteam > hometeam:
+        if (awayteam - hometeam) < 3:
+            return (football_values[3])
+            
+        elif (awayteam - hometeam) < 5:
+            return (football_values[3] * 1.2)
+            
+        elif (awayteam - hometeam) < 7:
+            return (football_values[3] * 1.5)
+            
+        else:
+            return (football_values[3] * 2)
+
     elif hometeam == awayteam:
         return 0
     
     else:
-        return football_values[3]
-
-
-def R_compare(values):
-    hometeam = int(values[8])
-    awayteam = int(values[9])
+        print("Error")
     
+
+
+def R_compare(value):
+    try:
+        hometeam = int(value['Red Cards'][0]) 
+    except:
+        hometeam = 0
+    
+    try:
+        awayteam = int(value['Red Cards'][0])
+    except:
+        awayteam = 0 
+
+
     if hometeam > awayteam:
-        return -(football_values[4])
+        if (hometeam - awayteam) < 2:
+            return -(football_values[4])
+            
+        elif (hometeam - awayteam) < 3:
+            return -(football_values[4] * 1.2)
+            
+        elif (hometeam - awayteam) < 4:
+            return -(football_values[4] * 1.5)
+            
+        else:
+            return -(football_values[4] * 2)     
     
+    elif awayteam > hometeam:
+        if (awayteam - hometeam) < 2:
+            return (football_values[4])
+            
+        elif (awayteam - hometeam) < 3:
+            return (football_values[4] * 1.2)
+            
+        elif (awayteam - hometeam) < 4:
+            return (football_values[4] * 1.5)
+            
+        else:
+            return (football_values[4] * 2)
+
     elif hometeam == awayteam:
         return 0
     
     else:
-        return football_values[4]
-
-
+        print("Error")
+    
 def winning_team(team_score):
-    print(team_score)
+
     if team_score > 0:
         return "H"
     elif team_score < 0:
@@ -128,47 +210,97 @@ def winning_team(team_score):
     else:
         return "D"
 
-def betting(prediction, values):
-    if prediction == "H":
-        if float(values[10]) > 1.1:
-            print("You should bet for H")
-        else:
-            print("You should not bet")
+def get_stats(matches):
+    info_stat = []
     
-    elif prediction == 'D':
-        if float(values[12]) > 1.1:
-            print("You should bet for D")
-        else:
-            print("You should not bet")
+    for match in matches:
+        match_url = "https://www.flashscore.com/match/" + match[4:] + "/#match-summary"
+        print(match_url)
+        driver.get(match_url)
+        
+        time.sleep(3)
+        driver.find_element_by_xpath("""//*[@id="li-match-statistics"]""").click()
+        time.sleep(1)
+        
+        info_raw = driver.find_elements_by_class_name("statText.statText")
+        info = []
+        for element in info_raw:
+            info.append(element.text)
+        
+        driver.implicitly_wait(3)
+        info = remove_values_from_list(info, '')
+        
+        info_stat.append(info)
+        time.sleep(2)
+    driver.quit()
+    return info_stat
+
+def remove_values_from_list(the_list, val):
+   return [value for value in the_list if value != val]
+
+def get_matches():
+    driver.get("https://www.flashscore.com/")
+    time.sleep(3)
+    driver.find_element_by_xpath("""//*[@id="live-table"]/div[1]/div/div[2]""").click()
+
+    content = driver.page_source
+    soup = BeautifulSoup(content, features="html.parser")
+    matches_raw = soup.find_all('div', class_='event__match' )
+    match_id = []
+    for tag in matches_raw:
+        match_id.append(tag.get("id"))
+
+    return match_id
+
+
+def get_stats1(match):
     
-    else:
-        if float(values[11]) > 1.1:
-            print("You should bet for A")
-        else:
-            print("You should not bet")
-    
+   
+    driver.implicitly_wait(3)
+    match_url = "https://www.flashscore.com/match/" + match[4:] + "/#match-summary"
+    driver.get(match_url)
+        
+    time.sleep(3)
+    driver.find_element_by_xpath("""//*[@id="li-match-statistics"]""").click()
+    driver.implicitly_wait(3)
+        
+    info_raw = driver.find_elements_by_class_name("statText.statText")
+    info = []
+    for element in info_raw:
+        info.append(element.text)
+        
+    driver.implicitly_wait(3)
+    info = remove_values_from_list(info, '')
+        
+    time.sleep(1)
+    return(info)
+
 
 
 if __name__ == "__main__":
-    money_earned = 0
-    predictions_correct = 0
-    matches_bet = 0
-    matches_bet_correct = 0
-  
-    values = get_input()
-
-    results = HTG_compare(values)
+    matches1 = ["eeeez7bKeorA", "eeeeU5iTgPCM", "eeeeSteCc7Dc", "eeeedGaGdRS3", "eeeeQywal3zp", "eeeeIVmPf5cG"]
+    try:
+        matches = get_matches()
+        print(matches)
+    
+    except:
+        matches = get_matches()
+    
+    finally:
+        for match in matches1:
+            stat_input = get_stats1(match) #Should be matches once matches are live again
+            match_stat = {}
+            for x in range(int(len(stat_input) / 3)):
+                match_stat[stat_input[1]] = [stat_input[0], stat_input[2]]
+                stat_input = stat_input[3:]
+            print("")
+            print(match_stat)
+            #team_performance_score = HTG_compare(match_stat)
+            team_performance_score = ST_compare(match_stat)
+            team_performance_score += S_compare(match_stat)
+            team_performance_score += Y_compare(match_stat)
+            team_performance_score += R_compare(match_stat)
+            prediction = winning_team(team_performance_score)
+            print(prediction)
             
-    results += ST_compare(values)
-            
-    results += S_compare(values)
-
-            
-    results += Y_compare(values)
-
-            
-    results += R_compare(values)
-           
-    prediction = winning_team(results)
-
-    betting(prediction, values)
+        driver.quit()

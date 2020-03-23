@@ -25,10 +25,35 @@ def get_matches():
 
     return match_id
 
+def get_stats1(match):
+    
+   
+    driver.implicitly_wait(3)
+    match_url = "https://www.flashscore.com/match/" + match[4:] + "/#match-summary"
+    driver.get(match_url)
+        
+    time.sleep(3)
+    driver.find_element_by_xpath("""//*[@id="li-match-statistics"]""").click()
+    driver.implicitly_wait(3)
+        
+    info_raw = driver.find_elements_by_class_name("statText.statText")
+    info = []
+    for element in info_raw:
+        info.append(element.text)
+        
+    driver.implicitly_wait(3)
+    info = remove_values_from_list(info, '')
+        
+    time.sleep(1)
+    return(info)
+
+
 def get_stats(matches):
+    info_stat = []
+    
     for match in matches:
-        driver.implicitly_wait(3)
         match_url = "https://www.flashscore.com/match/" + match[4:] + "/#match-summary"
+        print(match_url)
         driver.get(match_url)
         
         time.sleep(3)
@@ -43,12 +68,14 @@ def get_stats(matches):
         driver.implicitly_wait(3)
         info = remove_values_from_list(info, '')
         
-        print(info)
+        info_stat.append(info)
         driver.implicitly_wait(3)
     driver.quit()
+    return info_stat
 
-# matches = ["eeeez7bKeorA", "eeeeU5iTgPCM", "eeeeSteCc7Dc", "eeeedGaGdRS3", "eeeeQywal3zp", "eeeeIVmPf5cG"] test list for get_stats
 
-matches = get_matches()
-print(matches)
-get_stats(matches)
+#matches = ["eeeez7bKeorA", "eeeeU5iTgPCM", "eeeeSteCc7Dc", "eeeedGaGdRS3", "eeeeQywal3zp", "eeeeIVmPf5cG"] #test list for get_stats
+
+#matches = get_matches()
+#print(matches)
+#get_stats(matches)
