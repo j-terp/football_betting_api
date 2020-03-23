@@ -21,14 +21,15 @@ for tag in matches_raw:
     match_id.append(tag.get("id"))
 
 print(match_id)
+
 for match in match_id:
     time.sleep(2)
     match_url = "https://www.flashscore.com/match/" + match[4:] + "/#match-summary"
     driver.get(match_url)
     driver.find_element_by_xpath("""//*[@id="live-table"]/div[1]/div/div[2]""").click()
-    info = driver.page_source
+    info = driver.page_source    
     print(info)
-    
+
 
 """
 print(soup)
