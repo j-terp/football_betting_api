@@ -10,9 +10,9 @@ service = Service(r'C:/webdrivers/chromedriver.exe')
 service.start()
 driver = webdriver.Remote(service.service_url)
 
-def HTG_compare(value):
-    hometeam = int(value[1])
-    awayteam = int(value[2])
+def HTG_compare(score):
+    hometeam = int(score[0])
+    awayteam = int(score[1])
 
     if hometeam > awayteam:
         if (hometeam - awayteam) == 1:
@@ -223,6 +223,8 @@ def get_stats(matches):
         time.sleep(1)
         
         info_raw = driver.find_elements_by_class_name("statText.statText")
+        standings_raw = driver.find_elements_by_class_name("current-result").text
+        print(standings_raw)
         info = []
         for element in info_raw:
             info.append(element.text)
@@ -246,6 +248,7 @@ def get_matches():
     content = driver.page_source
     soup = BeautifulSoup(content, features="html.parser")
     matches_raw = soup.find_all('div', class_='event__match' )
+    print(matches_raw)
     match_id = []
     for tag in matches_raw:
         match_id.append(tag.get("id"))
@@ -260,11 +263,16 @@ def get_stats1(match):
     match_url = "https://www.flashscore.com/match/" + match[4:] + "/#match-summary"
     driver.get(match_url)
         
-    time.sleep(3)
+    time.sleep(3)    
     driver.find_element_by_xpath("""//*[@id="li-match-statistics"]""").click()
     driver.implicitly_wait(3)
-        
+
+    standings_raw = driver.find_elements_by_class_name("current-result")    
     info_raw = driver.find_elements_by_class_name("statText.statText")
+    
+    standings = []
+    for char in standings_raw:
+        standings.append(char.text)
     info = []
     for element in info_raw:
         info.append(element.text)
@@ -273,9 +281,16 @@ def get_stats1(match):
     info = remove_values_from_list(info, '')
         
     time.sleep(1)
-    return(info)
+    return(info, standings)
 
-
+def list_to_string(s):  
+    
+    str1 = ""  
+       
+    for ele in s:  
+        str1 += ele   
+       
+    return str1  
 
 if __name__ == "__main__":
     matches1 = ["eeeez7bKeorA", "eeeeU5iTgPCM", "eeeeSteCc7Dc", "eeeedGaGdRS3", "eeeeQywal3zp", "eeeeIVmPf5cG"]
@@ -288,19 +303,26 @@ if __name__ == "__main__":
     
     finally:
         for match in matches1:
-            stat_input = get_stats1(match) #Should be matches once matches are live again
+            stat_input, standings_unprocessed = get_stats1(match) #Should be matches once matches are live again
+            
+            standings = []
+            standings_unprocessed = list_to_string(standings_unprocessed)
+            print(standings_unprocessed)
+            standings.append(standings_unprocessed[0])
+            standings.append(standings_unprocessed[3])
             match_stat = {}
             for x in range(int(len(stat_input) / 3)):
                 match_stat[stat_input[1]] = [stat_input[0], stat_input[2]]
                 stat_input = stat_input[3:]
-            print("")
             print(match_stat)
-            #team_performance_score = HTG_compare(match_stat)
-            team_performance_score = ST_compare(match_stat)
+            print(standings)
+            team_performance_score = HTG_compare(standings)
+            team_performance_score += ST_compare(match_stat)
             team_performance_score += S_compare(match_stat)
             team_performance_score += Y_compare(match_stat)
             team_performance_score += R_compare(match_stat)
             prediction = winning_team(team_performance_score)
             print(prediction)
+            print("Match done")
             
         driver.quit()
