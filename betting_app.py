@@ -9,6 +9,7 @@ from get_values import football_values
 service = Service(r'C:/webdrivers/chromedriver.exe')
 service.start()
 driver = webdriver.Remote(service.service_url)
+driver.implicitly_wait(15)
 
 def HTG_compare(score):
     hometeam = int(score[0])
@@ -242,7 +243,7 @@ def remove_values_from_list(the_list, val):
 
 def get_matches():
     driver.get("https://www.flashscore.com/")
-    time.sleep(3)
+    
     driver.find_element_by_xpath("""//*[@id="live-table"]/div[1]/div/div[2]""").click()
 
     content = driver.page_source
@@ -259,13 +260,13 @@ def get_matches():
 def get_stats1(match):
     
    
-    driver.implicitly_wait(3)
+    
     match_url = "https://www.flashscore.com/match/" + match[4:] + "/#match-summary"
     driver.get(match_url)
         
-    time.sleep(3)    
+        
     driver.find_element_by_xpath("""//*[@id="li-match-statistics"]""").click()
-    driver.implicitly_wait(3)
+    
 
     standings_raw = driver.find_elements_by_class_name("current-result")    
     info_raw = driver.find_elements_by_class_name("statText.statText")
@@ -277,10 +278,10 @@ def get_stats1(match):
     for element in info_raw:
         info.append(element.text)
         
-    driver.implicitly_wait(3)
+    
     info = remove_values_from_list(info, '')
         
-    time.sleep(1)
+    
     return(info, standings)
 
 def list_to_string(s):  
