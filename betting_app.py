@@ -4,12 +4,15 @@ import pandas as pd
 import time
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+from selenium.common.exceptions import TimeoutException
 from get_values import football_values
 
 service = Service(r'C:/webdrivers/chromedriver.exe')
 service.start()
 driver = webdriver.Remote(service.service_url)
-driver.implicitly_wait(15)
 
 def HTG_compare(score):
     hometeam = int(score[0])
@@ -205,11 +208,11 @@ def R_compare(value):
 def winning_team(team_score):
 
     if team_score > 0:
-        return "H"
+        return "You should bet for H"
     elif team_score < 0:
-        return "A"
+        return "You should bet for A"
     else:
-        return "D"
+        return "You should bet for D"
 
 def get_stats(matches):
     info_stat = []
@@ -243,18 +246,26 @@ def remove_values_from_list(the_list, val):
 
 def get_matches():
     driver.get("https://www.flashscore.com/")
-    
+
+
+    _ = WebDriverWait(driver, 20).until(
+    EC.element_to_be_clickable((By.XPATH, """//*[@id="live-table"]/div[1]/div/div[2]""")))
     driver.find_element_by_xpath("""//*[@id="live-table"]/div[1]/div/div[2]""").click()
+
+
+    _ = WebDriverWait(driver, 20).until(
+    EC.element_to_be_clickable((By.CLASS_NAME, "container__fsbody")))
+    
 
     content = driver.page_source
     soup = BeautifulSoup(content, features="html.parser")
     matches_raw = soup.find_all('div', class_='event__match' )
-    print(matches_raw)
     match_id = []
     for tag in matches_raw:
         match_id.append(tag.get("id"))
-
+    
     return match_id
+    
 
 
 def get_stats1(match):
@@ -263,12 +274,18 @@ def get_stats1(match):
     
     match_url = "https://www.flashscore.com/match/" + match[4:] + "/#match-summary"
     driver.get(match_url)
-        
-        
-    driver.find_element_by_xpath("""//*[@id="li-match-statistics"]""").click()
     
+    element = WebDriverWait(driver, 20).until(
+    EC.element_to_be_clickable((By.XPATH, """//*[@id="li-match-statistics"]""")))
 
-    standings_raw = driver.find_elements_by_class_name("current-result")    
+    element.click()
+    
+    element = WebDriverWait(driver, 20).until(
+    EC.presence_of_all_elements_located((By.CLASS_NAME, "current-result")))
+    standings_raw = driver.find_elements_by_class_name("current-result") 
+
+    element = WebDriverWait(driver, 20).until(
+    EC.presence_of_all_elements_located((By.CLASS_NAME, "statText.statText")))
     info_raw = driver.find_elements_by_class_name("statText.statText")
     
     standings = []
@@ -282,7 +299,7 @@ def get_stats1(match):
     info = remove_values_from_list(info, '')
         
     
-    return(info, standings)
+    return(info, standings, match_url)
 
 def list_to_string(s):  
     
@@ -301,29 +318,33 @@ if __name__ == "__main__":
     
     except:
         matches = get_matches()
+        print(matches)
     
     finally:
         for match in matches1:
-            stat_input, standings_unprocessed = get_stats1(match) #Should be matches once matches are live again
-            
-            standings = []
-            standings_unprocessed = list_to_string(standings_unprocessed)
-            print(standings_unprocessed)
-            standings.append(standings_unprocessed[0])
-            standings.append(standings_unprocessed[3])
-            match_stat = {}
-            for x in range(int(len(stat_input) / 3)):
-                match_stat[stat_input[1]] = [stat_input[0], stat_input[2]]
-                stat_input = stat_input[3:]
-            print(match_stat)
-            print(standings)
-            team_performance_score = HTG_compare(standings)
-            team_performance_score += ST_compare(match_stat)
-            team_performance_score += S_compare(match_stat)
-            team_performance_score += Y_compare(match_stat)
-            team_performance_score += R_compare(match_stat)
-            prediction = winning_team(team_performance_score)
-            print(prediction)
-            print("Match done")
-            
+            try:
+                stat_input, standings_unprocessed, url = get_stats1(match) #Should be matches once matches are live again
+            except:
+                stat_input, standings_unprocessed, url = get_stats1(match) #Should be matches once matches are live again
+            finally:
+                standings = []
+                standings_unprocessed = list_to_string(standings_unprocessed)
+                
+                standings.append(standings_unprocessed[0])
+                standings.append(standings_unprocessed[3])
+                match_stat = {}
+                for x in range(int(len(stat_input) / 3)):
+                    match_stat[stat_input[1]] = [stat_input[0], stat_input[2]]
+                    stat_input = stat_input[3:]
+                
+                team_performance_score = HTG_compare(standings)
+                team_performance_score += ST_compare(match_stat)
+                team_performance_score += S_compare(match_stat)
+                team_performance_score += Y_compare(match_stat)
+                team_performance_score += R_compare(match_stat)
+                prediction = winning_team(team_performance_score)
+                
+                print("In match with url", url, prediction)
+                print("Match done")
+                
         driver.quit()
