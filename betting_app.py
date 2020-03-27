@@ -297,9 +297,17 @@ def get_stats1(match):
         
     
     info = remove_values_from_list(info, '')
-        
-    
-    return(info, standings, match_url)
+    try:
+        element = WebDriverWait(driver, 20).until(
+        EC.presence_of_all_elements_located((By.ID, "part-top1")))
+        time = int(driver.find_elements_by_id("part-top1"))
+    except:
+        time = 0
+
+    finally:    
+        return(info, standings, match_url, time)
+
+ 
 
 def list_to_string(s):  
     
@@ -323,28 +331,30 @@ if __name__ == "__main__":
     finally:
         for match in matches1:
             try:
-                stat_input, standings_unprocessed, url = get_stats1(match) #Should be matches once matches are live again
+                stat_input, standings_unprocessed, url, time = get_stats1(match) #Should be matches once matches are live again
             except:
-                stat_input, standings_unprocessed, url = get_stats1(match) #Should be matches once matches are live again
+                stat_input, standings_unprocessed, url, time = get_stats1(match) #Should be matches once matches are live again
             finally:
-                standings = []
-                standings_unprocessed = list_to_string(standings_unprocessed)
-                
-                standings.append(standings_unprocessed[0])
-                standings.append(standings_unprocessed[3])
-                match_stat = {}
-                for x in range(int(len(stat_input) / 3)):
-                    match_stat[stat_input[1]] = [stat_input[0], stat_input[2]]
-                    stat_input = stat_input[3:]
-                
-                team_performance_score = HTG_compare(standings)
-                team_performance_score += ST_compare(match_stat)
-                team_performance_score += S_compare(match_stat)
-                team_performance_score += Y_compare(match_stat)
-                team_performance_score += R_compare(match_stat)
-                prediction = winning_team(team_performance_score)
-                
-                print("In match with url", url, prediction)
-                print("Match done")
-                
+                if time > 40 and time < 50:
+                    standings = []
+                    standings_unprocessed = list_to_string(standings_unprocessed)
+                    
+                    standings.append(standings_unprocessed[0])
+                    standings.append(standings_unprocessed[3])
+                    match_stat = {}
+                    for x in range(int(len(stat_input) / 3)):
+                        match_stat[stat_input[1]] = [stat_input[0], stat_input[2]]
+                        stat_input = stat_input[3:]
+                    
+                    team_performance_score = HTG_compare(standings)
+                    team_performance_score += ST_compare(match_stat)
+                    team_performance_score += S_compare(match_stat)
+                    team_performance_score += Y_compare(match_stat)
+                    team_performance_score += R_compare(match_stat)
+                    prediction = winning_team(team_performance_score)
+                    
+                    print("In match with url", url, prediction)
+                    print("Match done")
+                else:
+                    pass
         driver.quit()
