@@ -299,7 +299,7 @@ def get_stats1(match):
     info = remove_values_from_list(info, '')
     try:
         element = WebDriverWait(driver, 20).until(
-        EC.presence_of_all_elements_located((By.ID, "part-top1")))  # Code should work but not tested due to coronavirus
+        EC.presence_of_all_elements_located((By.ID, "part-top1")))  # Code should work but not tested due to coronavirus maybe "info-status mstat"
         time = int(driver.find_elements_by_id("part-top1"))
     except:
         time = 0
