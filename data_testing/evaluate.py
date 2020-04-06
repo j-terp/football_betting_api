@@ -51,7 +51,7 @@ def evalR(prediction, match):
 def main_eval():
     base_dataframe = csv_fetch()
     base_dictionary, _ = df_to_dict(base_dataframe)
-    for match in range(4180):
+    for match in range(3800):
         football_values[0] += evalHTG(base_dictionary, match)
         football_values[1] += evalS(base_dictionary, match)
         football_values[2] += evalST(base_dictionary, match)
@@ -66,7 +66,7 @@ def main_eval():
     temp = str(football_values)
     temp = temp[1:-1]
     print(temp)
-    file = open("football_values.txt","r+")
+    file = open("data_testing/football_values.txt","r+")
     file.truncate(0)
     file.write(temp)
     file.close()

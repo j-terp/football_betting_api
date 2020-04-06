@@ -1,5 +1,5 @@
 import pandas as pd
-file = "football_data.csv"
+
 
 def fetch_data(file):
     data = pd.read_csv(file) # All data
@@ -10,13 +10,13 @@ def dataset_to_dictionary(dataset):
     main_dictionary = dataset.to_dict('index')
     return main_dictionary
 
-def single_match(index):
+def single_match(index, file):
     data_set = fetch_data(file)
     single = data_set.loc[index,:] # Skapar en kolumn för en enskild match
     return single
 
 def csv_fetch():
-    fetched_dataframe = pd.read_csv(r'dataframe.csv')
+    fetched_dataframe = pd.read_csv(r'data_testing/dataframe.csv')
     return fetched_dataframe
 
 def csv_append(value_list):
@@ -26,12 +26,12 @@ def csv_append(value_list):
     return base_dataframe
 
 def csv_return(dataframe):
-    export_csv = dataframe.to_csv(r'dataframe.csv', index = None, header=True) #Don't forget to add '.csv' at the end of the path
+    export_csv = dataframe.to_csv(r'data_testing/dataframe.csv', index = None, header=True) #Don't forget to add '.csv' at the end of the path
     return export_csv
 
 def csv_clean():
     base_dataframe = csv_fetch()
-    export_csv = pd.DataFrame(columns=base_dataframe.columns).to_csv(r'dataframe.csv', index = None, header=True)
+    export_csv = pd.DataFrame(columns=base_dataframe.columns).to_csv(r'data_testing/dataframe.csv', index = None, header=True)
     return export_csv
 
 def df_to_dict(dataframe):
