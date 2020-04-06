@@ -1,5 +1,5 @@
 def get_values():
-    f = open("football_values.txt", "r")
+    f = open("data_testing/football_values.txt", "r")
     values = (f.read())
 
     # convert to the list
