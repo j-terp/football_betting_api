@@ -1,11 +1,18 @@
 import wx
+import sys
+import os.path
+sys.path.append(
+    os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
+
+from demo import main
 
 class HelloFrame(wx.Frame):
     def __init__(self, *args, **kw):
         super(HelloFrame, self).__init__(*args, **kw)
 
         pnl = wx.Panel(self)
-        st = wx.StaticText(pnl, label = "Betting")
+        text = main()
+        st = wx.StaticText(pnl, label = text)
         font = st.GetFont()
         font.PointSize += 10
         font = font.Bold()
@@ -48,16 +55,9 @@ class HelloFrame(wx.Frame):
     def OnAbout(self, event):
         wx.MessageBox("This is a wxPython Hello World Sample", "About Hello World 2", wx.OK|wx.ICON_INFORMATION)
 
-    
-    def someFunction(self):
-        self.st.SetLabel("Elliot")
-
-def number():
-    return 2
-
 if __name__ == '__main__':
-    x = number()
     app = wx.App()
     frm = HelloFrame(None, title='Betting predictions')
+    self.st_RouteInfo.SetLabel("Hello")
     frm.Show()
     app.MainLoop()
