@@ -254,7 +254,7 @@ def betting(match, results, points):
             return 0, 0, 0
 
 
-file_list = ["imported_data/E0_2005.csv", "imported_data/E0_2006.csv", "imported_data/E0_2007.csv", "imported_data/E0_2008.csv", "imported_data/E0_2009.csv", "imported_data/E0_2010.csv", "imported_data/E0_2011.csv", "imported_data/E0_2012.csv", "imported_data/E0_2013.csv", "imported_data/E0_2014.csv"]
+file_list = ["imported_data/E0_2005.csv", "imported_data/E0_2006.csv", "imported_data/E0_2007.csv", "imported_data/E0_2008.csv", "imported_data/E0_2009.csv", "imported_data/E0_2010.csv", "imported_data/E0_2011.csv", "imported_data/E0_2012.csv", "imported_data/E0_2013.csv", "imported_data/E0_2014.csv", "imported_data/football_data.csv"]
 
 if __name__ == "__main__":
     start_time = time.time()
