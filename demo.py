@@ -208,11 +208,11 @@ def R_compare(value):
 def winning_team(team_score):
 
     if team_score > 0:
-        return "You should bet for H"
+        return " You should bet for H"
     elif team_score < 0:
-        return "You should bet for A"
+        return " You should bet for A"
     else:
-        return "You should bet for D"
+        return " You should bet for D"
 
 def get_stats(matches):
     info_stat = []
@@ -313,7 +313,8 @@ def list_to_string(s):
        
     return str1  
 
-if __name__ == "__main__":
+def main():
+    results = []
     matches1 = ["eeeez7bKeorA", "eeeeU5iTgPCM", "eeeeSteCc7Dc", "eeeedGaGdRS3", "eeeeQywal3zp", "eeeeIVmPf5cG"]
     try:
         matches = get_matches()
@@ -337,7 +338,7 @@ if __name__ == "__main__":
                 standings.append(standings_unprocessed[0])
                 standings.append(standings_unprocessed[3])
                 match_stat = {}
-                for x in range(int(len(stat_input) / 3)):
+                for _ in range(int(len(stat_input) / 3)):
                     match_stat[stat_input[1]] = [stat_input[0], stat_input[2]]
                     stat_input = stat_input[3:]
                     
@@ -347,9 +348,13 @@ if __name__ == "__main__":
                 team_performance_score += Y_compare(match_stat)
                 team_performance_score += R_compare(match_stat)
                 prediction = winning_team(team_performance_score)
-                    
-                print("In match with url", url, prediction)
-                print("Match done")
+                text = str("In match with url " + url + prediction)    
+                results.append(text)
+                #print("Match done")
                 
                     
         driver.quit()
+        print(results)
+        return results
+if __name__ == "__main__":
+    main()

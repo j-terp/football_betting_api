@@ -1,4 +1,5 @@
 import wx
+import time
 import sys
 import os.path
 sys.path.append(
@@ -8,24 +9,28 @@ from demo import main
 
 class HelloFrame(wx.Frame):
     def __init__(self, *args, **kw):
+        info = main()
+        info_string = ""
+        for line in info:
+            info_string += str(line)
+            info_string += "\n"
+        
         super(HelloFrame, self).__init__(*args, **kw)
-
         pnl = wx.Panel(self)
-        text = main()
-        st = wx.StaticText(pnl, label = text)
-        font = st.GetFont()
-        font.PointSize += 10
-        font = font.Bold()
+        vbox = wx.BoxSizer(wx.VERTICAL)
+        st = wx.StaticText(pnl, label = info_string, style=wx.ALIGN_LEFT)
+        font = wx.Font(10, wx.ROMAN, wx.NORMAL, wx.NORMAL)
         st.SetFont(font)
-
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(st, wx.SizerFlags().Border(wx.TOP|wx.LEFT, 25))
-        pnl.SetSizer(sizer)
-
+        vbox.Add(st, flag=wx.ALL, border=15)
+        pnl.SetSizer(vbox)
+        
+        self.Centre()
+        self.SetSize((600, 600))
         self.makeMenuBar()
         self.CreateStatusBar()
         self.SetStatusText("Welcome to wxPython!")
-    
+            
+
     def makeMenuBar(self):
         fileMenu = wx.Menu()
         helloItem = fileMenu.Append(-1, "&Hello...\tCtrl-H",
@@ -58,6 +63,5 @@ class HelloFrame(wx.Frame):
 if __name__ == '__main__':
     app = wx.App()
     frm = HelloFrame(None, title='Betting predictions')
-    self.st_RouteInfo.SetLabel("Hello")
     frm.Show()
     app.MainLoop()
