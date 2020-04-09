@@ -9,6 +9,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
 from data_testing.get_values import football_values
+from frame_testing.uitest import HelloFrame
+import wx
+
 
 service = Service(r'C:/webdrivers/chromedriver.exe')
 service.start()
@@ -318,8 +321,19 @@ def list_to_string(s):
        
     return str1  
 
+def list_to_string_spaces(list):
+    info_string = ""
+    for line in list:
+        info_string += str(line)
+        info_string += "\n"
+    return info_string
+
+
 if __name__ == "__main__":
     matches1 = ["eeeez7bKeorA", "eeeeU5iTgPCM", "eeeeSteCc7Dc", "eeeedGaGdRS3", "eeeeQywal3zp", "eeeeIVmPf5cG"]
+    app = wx.App()
+    frm = HelloFrame(None, title='Betting predictions')
+    results = []
     try:
         matches = get_matches()
         print(matches)
@@ -329,7 +343,7 @@ if __name__ == "__main__":
         print(matches)
     
     finally:
-        for match in matches1:
+        for match in matches:
             try:
                 stat_input, standings_unprocessed, url, time = get_stats1(match) #Should be matches once matches are live again
             except:
@@ -353,8 +367,13 @@ if __name__ == "__main__":
                     team_performance_score += R_compare(match_stat)
                     prediction = winning_team(team_performance_score)
                     
-                    print("In match with url", url, prediction)
-                    print("Match done")
+                    text = str("In match with url " + url + prediction)    
+                    results.append(text)
                 else:
                     pass
         driver.quit()
+        results = list_to_string_spaces(results)
+        frm.change_text(results)
+        frm.message("Your predictions are ready, click OK to show")
+        frm.Show()
+        app.MainLoop()
