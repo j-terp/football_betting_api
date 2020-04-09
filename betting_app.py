@@ -11,11 +11,15 @@ from selenium.common.exceptions import TimeoutException
 from data_testing.get_values import football_values
 from frame_testing.ui_main import HelloFrame
 import wx
-
+from selenium.webdriver.chrome.options import Options
 
 service = Service(r'C:/webdrivers/chromedriver.exe')
 service.start()
-driver = webdriver.Remote(service.service_url)
+
+options = Options()
+options.add_argument('--headless')
+options.add_argument('--disable-gpu')
+driver = webdriver.Chrome(options=options)
 
 def HTG_compare(score):
     hometeam = int(score[0])
