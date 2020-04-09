@@ -9,7 +9,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
 from data_testing.get_values import football_values
-from frame_testing.uitest import HelloFrame
+from frame_testing.ui_main import HelloFrame
 import wx
 
 service = Service(r'C:/webdrivers/chromedriver.exe')
