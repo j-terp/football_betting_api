@@ -25,7 +25,7 @@ class HelloFrame(wx.Frame):
         pnl.SetSizer(vbox)
         
         self.Centre()
-        self.SetSize((600, 600))
+        self.SetSize((800, 800))
         self.makeMenuBar()
         self.CreateStatusBar()
         self.SetStatusText("Welcome to wxPython!")
