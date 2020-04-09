@@ -9,6 +9,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
 from data_testing.get_values import football_values
+from frame_testing.uitest import HelloFrame
+import wx
 
 service = Service(r'C:/webdrivers/chromedriver.exe')
 service.start()
@@ -311,9 +313,18 @@ def list_to_string(s):
     for ele in s:  
         str1 += ele   
        
-    return str1  
+    return str1
+
+def list_to_string_spaces(list):
+    info_string = ""
+    for line in list:
+        info_string += str(line)
+        info_string += "\n"
+    return info_string
 
 def main():
+    app = wx.App()
+    frm = HelloFrame(None, title='Betting predictions')
     results = []
     matches1 = ["eeeez7bKeorA", "eeeeU5iTgPCM", "eeeeSteCc7Dc", "eeeedGaGdRS3", "eeeeQywal3zp", "eeeeIVmPf5cG"]
     try:
@@ -354,7 +365,13 @@ def main():
                 
                     
         driver.quit()
-        print(results)
-        return results
+        results = list_to_string_spaces(results)
+        frm.change_text(results)
+        frm.message("Your predictions are ready, click OK to show")
+        frm.Show()
+        app.MainLoop()
+
 if __name__ == "__main__":
     main()
+
+

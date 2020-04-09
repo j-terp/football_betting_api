@@ -14,7 +14,7 @@ class HelloFrame(wx.Frame):
         pnl = wx.Panel(self)
         self.st = wx.StaticText(pnl, label = "Betting")
         font = self.st.GetFont()
-        font.PointSize += 10
+        font.PointSize += 5
         font = font.Bold()
         self.st.SetFont(font)
 
@@ -22,6 +22,8 @@ class HelloFrame(wx.Frame):
         sizer.Add(self.st, wx.SizerFlags().Border(wx.TOP|wx.LEFT, 25))
         pnl.SetSizer(sizer)
 
+        self.Centre()
+        self.SetSize((1200, 800))
         self.makeMenuBar()
         self.CreateStatusBar()
         self.SetStatusText("Welcome to wxPython!")
