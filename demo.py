@@ -10,8 +10,10 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
 from data_testing.get_values import football_values
 from frame_testing.ui_main import HelloFrame
+from frame_testing.progress_bar2 import progress_bar
 import wx
 from selenium.webdriver.chrome.options import Options
+import threading
 
 service = Service(r'C:/webdrivers/chromedriver.exe')
 service.start()
@@ -330,9 +332,18 @@ def list_to_string_spaces(list):
         info_string += "\n"
     return info_string
 
+#def mainloop():
+    #ex.MainLoop()
+
+#def mainloop_thread():
+    #threading.Timer(0.25, mainloop).start()
+
+
 def main():
     app = wx.App()
     frm = HelloFrame(None, title='Betting predictions')
+
+    #ex = wx.App()
     results = []
     matches1 = ["eeeez7bKeorA", "eeeeU5iTgPCM", "eeeeSteCc7Dc", "eeeedGaGdRS3", "eeeeQywal3zp", "eeeeIVmPf5cG"]
     try:
@@ -344,13 +355,17 @@ def main():
         print(matches)
     
     finally:
+        #bar = progress_bar(None,'Web scraping progress', len(matches1))
+        #bar.Show()
+
+        progress = 0
         for match in matches1:
             try:
                 stat_input, standings_unprocessed, url = get_stats1(match) #Should be matches once matches are live again
             except:
                 stat_input, standings_unprocessed, url = get_stats1(match) #Should be matches once matches are live again
             finally:
-                
+                #mainloop_thread()
                 standings = []
                 standings_unprocessed = list_to_string(standings_unprocessed)
                     
@@ -369,6 +384,8 @@ def main():
                 prediction = winning_team(team_performance_score)
                 text = str("In match with url " + url + prediction)    
                 results.append(text)
+                #progress = progress + 1
+                #bar.increment(progress)
                 #print("Match done")
                 
                     
