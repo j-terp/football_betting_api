@@ -358,7 +358,7 @@ def main():
         #bar = progress_bar(None,'Web scraping progress', len(matches1))
         #bar.Show()
 
-        progress = 0
+        #progress = 0
         for match in matches1:
             try:
                 stat_input, standings_unprocessed, url = get_stats1(match) #Should be matches once matches are live again
