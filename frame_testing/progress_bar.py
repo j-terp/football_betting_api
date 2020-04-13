@@ -1,5 +1,6 @@
 import wx 
 import time 
+import threading
 class Mywin(wx.Frame): 
             
    def __init__(self, parent, title): 
@@ -35,16 +36,19 @@ class Mywin(wx.Frame):
       time.sleep(1)
       val = val + 1 
       self.bar.SetValue(val) 
-      self.BestVirtualSize.UpdatePulse()
       if self.count >= 20: 
          print("end") 
          return 	
 				
 ex = wx.App() 
 mywin = Mywin(None,'wx.Gauge') 
-ex.MainLoop()
+t = threading.Thread(target=ex.MainLoop())
+t.setDaemon(1)
+t.start()
 count = 0
 for y in range(20):
    time.sleep(1)
    mywin.updateProgress(count)
+
+
    

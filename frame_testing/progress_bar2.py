@@ -1,6 +1,7 @@
 
 import wx 
 import time 
+import threading
 class progress_bar(wx.Frame): 
             
     def __init__(self, parent, title, lenght): 
@@ -35,14 +36,51 @@ class progress_bar(wx.Frame):
         self.gauge.UpdateWindowUI()
     
     def mainloop(self):
-        ex.MainLoop()
+        self.MainLoop()
+
+def test():
+    while True:
+        print("Hello")
+        time.sleep(1)
+
+def open_gauge(val):
+    ex = wx.App() 
+    mywin = progress_bar(None,'Web scraping progress', 7)
+    mywin.Show()
+    mywin.gauge.SetValue(val)
+        
+    mywin.gauge.UpdateWindowUI()
 
 if __name__ == "__main__":		
     ex = wx.App() 
     mywin = progress_bar(None,'Web scraping progress', 7)
     mywin.Show()
-    mywin.increment(7)
-    mywin.mainloop()
+    print("Got to here")
+    y = threading.Thread(target=ex.MainLoop, args=())
+    y.setDaemon(1)
+    x = threading.Thread(target=mywin.increment, args=(3,))
+    x.setDaemon(1)
+    #t = threading.Thread(target=ex.MainLoop, args=())
+    #t.setDaemon(1)
+    #y = threading.Thread(target=mywin.increment, args=(5) )
+    #y.setDaemon(1)
+    #t.start()
+    y.run()
+    x.run()
+    print("Got to here")
+    mywin.increment(3)
+    x.run()
+    time.sleep(3)
+    #x = threading.Thread(target=mywin.increment, args=(5,))
+    #x.setDaemon(1)
+    #x.run()
+    #ex.MainLoop()
+    time.sleep(5)
+    #y.start()
+    #for y in range(7):
+        #mywin.increment(y)
+
+
 
 
 

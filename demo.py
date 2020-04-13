@@ -339,13 +339,17 @@ def list_to_string_spaces(list):
     #threading.Timer(0.25, mainloop).start()
 
 
+
 def main():
     app = wx.App()
     frm = HelloFrame(None, title='Betting predictions')
 
     #ex = wx.App()
+
     results = []
+
     matches1 = ["eeeez7bKeorA", "eeeeU5iTgPCM", "eeeeSteCc7Dc", "eeeedGaGdRS3", "eeeeQywal3zp", "eeeeIVmPf5cG"]
+
     try:
         matches = get_matches()
         print(matches)
@@ -358,12 +362,20 @@ def main():
         #bar = progress_bar(None,'Web scraping progress', len(matches1))
         #bar.Show()
 
+        #t = threading.Thread(target=ex.MainLoop)
+        #x = threading.Thread(target=mywin.increment, args=(3,))
+        #x.setDaemon(1)
+        #x.start()
+
         #progress = 0
+
         for match in matches1:
             try:
                 stat_input, standings_unprocessed, url = get_stats1(match) #Should be matches once matches are live again
+
             except:
                 stat_input, standings_unprocessed, url = get_stats1(match) #Should be matches once matches are live again
+
             finally:
                 #mainloop_thread()
                 standings = []
@@ -382,8 +394,10 @@ def main():
                 team_performance_score += Y_compare(match_stat)
                 team_performance_score += R_compare(match_stat)
                 prediction = winning_team(team_performance_score)
+                
                 text = str("In match with url " + url + prediction)    
                 results.append(text)
+
                 #progress = progress + 1
                 #bar.increment(progress)
                 #print("Match done")
