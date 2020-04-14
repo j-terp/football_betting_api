@@ -1,3 +1,4 @@
+
 from bs4 import BeautifulSoup
 import pandas as pd
 import time
@@ -348,9 +349,9 @@ class MyFrame(wx.Frame):
         hbox3 = wx.BoxSizer(wx.HORIZONTAL)
 
         self.gauge = wx.Gauge(panel, -1, 10, size=(250, 25))
-        self.btn1 = wx.Button(panel, wx.ID_OK, label="Start")
+        self.btn1 = wx.Button(panel, wx.ID_OK)
         self.btn2 = wx.Button(panel, wx.ID_STOP)
-        self.text = wx.StaticText(panel, -1, "Click start to run web scraping")
+        self.text = wx.StaticText(panel, -1, "Task to be done")
 
         self.Bind(wx.EVT_BUTTON, self.OnOk, self.btn1)
         self.Bind(wx.EVT_BUTTON, self.OnStop, self.btn2)
@@ -369,7 +370,7 @@ class MyFrame(wx.Frame):
         self.Centre()
 
     def OnOk(self, event):
-        self.text.SetLabel("Gathering live matches")
+        self.text.SetLabel("Task in Progress")
         value = 0
         app = wx.App()
         frm = HelloFrame(None, title='Betting predictions')
@@ -379,23 +380,18 @@ class MyFrame(wx.Frame):
         results = []
 
         matches1 = ["eeeez7bKeorA", "eeeeU5iTgPCM", "eeeeSteCc7Dc", "eeeedGaGdRS3", "eeeeQywal3zp", "eeeeIVmPf5cG"]
-        self.gauge.SetRange(len(matches1))
+
         try:
             matches = get_matches()
             print(matches)
-            self.gauge.SetRange(len(matches1) + 1) #Should be matches in full version
         
         except:
             matches = get_matches()
             print(matches)
-            self.gauge.SetRange(len(matches1) + 1) #Should be matches in full version
         
         finally:
-            self.text.SetLabel("Gathering stats from matches")
             value = value + 1
             self.gauge.SetValue(value)
-            self.gauge.UpdateWindowUI()
-            wx.Yield()
             #bar = progress_bar(None,'Web scraping progress', len(matches1))
             #bar.Show()
 
@@ -436,8 +432,6 @@ class MyFrame(wx.Frame):
                     results.append(text)
                     value = value + 1
                     self.gauge.SetValue(value)
-                    self.gauge.UpdateWindowUI()
-                    wx.Yield()
 
                     #progress = progress + 1
                     #bar.increment(progress)
@@ -446,11 +440,8 @@ class MyFrame(wx.Frame):
                         
             driver.quit()
             results = list_to_string_spaces(results)
-            self.text.SetLabel("Task Completed")
             frm.change_text(results)
-            self.Close()
             frm.message("Your predictions are ready, click OK to show")
-
             frm.Show()
             app.MainLoop()
 
@@ -474,10 +465,11 @@ class MyFrame(wx.Frame):
             #self.text.SetLabel("Task in Progress")
 
     def OnStop(self, event):
+        if self.count == 0 or self.count >= 50 or not self.timer.IsRunning():
+            return
+        self.timer.Stop()
         self.text.SetLabel("Task Interrupted")
-        app = wx.App()
-        frm = HelloFrame(None, title='Betting app') #Dummy does not do anything just to allow a message
-        frm.message("Task failed successfully! \n \n Why did you click this? Well, now the program is broken so you might as well restart")
+        wx.Bell()
 
     #def OnTimer(self, event):
         #self.count = self.count +1
@@ -488,10 +480,10 @@ class MyFrame(wx.Frame):
 
 class MyApp(wx.App):
     def OnInit(self):
-        frame = MyFrame(None, -1, "Betting app")
+        frame = MyFrame(None, -1, "gauge.py")
         frame.Show(True)
         return True
 
-if __name__ == "__main__":
-    ex = MyApp(0)
-    ex.MainLoop()
+
+ex = MyApp(0)
+ex.MainLoop()
