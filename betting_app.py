@@ -1,4 +1,3 @@
-
 from bs4 import BeautifulSoup
 import pandas as pd
 import time
@@ -10,8 +9,10 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
 from data_testing.get_values import football_values
 from frame_testing.ui_main import HelloFrame
+from frame_testing.progress_bar2 import progress_bar
 import wx
 from selenium.webdriver.chrome.options import Options
+import threading
 
 service = Service(r'C:/webdrivers/chromedriver.exe')
 service.start()
@@ -215,11 +216,11 @@ def R_compare(value):
 def winning_team(team_score):
 
     if team_score > 0:
-        return "You should bet for H"
+        return " You should bet for H"
     elif team_score < 0:
-        return "You should bet for A"
+        return " You should bet for A"
     else:
-        return "You should bet for D"
+        return " You should bet for D"
 
 def get_stats(matches):
     info_stat = []
@@ -304,15 +305,10 @@ def get_stats1(match):
         
     
     info = remove_values_from_list(info, '')
-    try:
-        element = WebDriverWait(driver, 20).until(
-        EC.presence_of_all_elements_located((By.ID, "part-top1")))  # Code should work but not tested due to coronavirus maybe "info-status mstat"
-        time = int(driver.find_elements_by_id("part-top1"))
-    except:
-        time = 0
+    
 
-    finally:    
-        return(info, standings, match_url, time)
+    
+    return(info, standings, match_url)
 
  
 
@@ -323,7 +319,7 @@ def list_to_string(s):
     for ele in s:  
         str1 += ele   
        
-    return str1  
+    return str1
 
 def list_to_string_spaces(list):
     info_string = ""
@@ -333,51 +329,133 @@ def list_to_string_spaces(list):
     return info_string
 
 
-if __name__ == "__main__":
-    matches1 = ["eeeez7bKeorA", "eeeeU5iTgPCM", "eeeeSteCc7Dc", "eeeedGaGdRS3", "eeeeQywal3zp", "eeeeIVmPf5cG"]
-    app = wx.App()
-    frm = HelloFrame(None, title='Betting predictions')
-    results = []
-    try:
-        matches = get_matches()
-        print(matches)
-    
-    except:
-        matches = get_matches()
-        print(matches)
-    
-    finally:
-        for match in matches:
-            try:
-                stat_input, standings_unprocessed, url, time = get_stats1(match) #Should be matches once matches are live again
-            except:
-                stat_input, standings_unprocessed, url, time = get_stats1(match) #Should be matches once matches are live again
-            finally:
-                if time > 40 and time < 50:
+class MyFrame(wx.Frame):
+    def __init__(self, parent, ID, title):
+        wx.Frame.__init__(self, parent, ID, title)
+
+        panel = wx.Panel(self, -1)
+        vbox = wx.BoxSizer(wx.VERTICAL)
+        hbox1 = wx.BoxSizer(wx.HORIZONTAL)
+        hbox2 = wx.BoxSizer(wx.HORIZONTAL)
+        hbox3 = wx.BoxSizer(wx.HORIZONTAL)
+
+        self.gauge = wx.Gauge(panel, -1, 10, size=(250, 25))
+        self.btn1 = wx.Button(panel, wx.ID_OK, label="Start")
+        self.btn2 = wx.Button(panel, wx.ID_STOP)
+        self.text = wx.StaticText(panel, -1, "Click start to run web scraping")
+        
+        self.Bind(wx.EVT_BUTTON, self.OnOk, self.btn1)
+        self.Bind(wx.EVT_BUTTON, self.OnStop, self.btn2)
+
+        hbox1.Add(self.gauge, 1, wx.ALIGN_CENTRE)
+        hbox2.Add(self.btn1, 1, wx.RIGHT, 10)
+        hbox2.Add(self.btn2, 1)
+        hbox3.Add(self.text, 1)
+        
+        vbox.Add((0, 50), 0)
+        vbox.Add(hbox1, 0, wx.ALIGN_CENTRE)
+        vbox.Add((0, 30), 0)
+        vbox.Add(hbox2, 1, wx.ALIGN_CENTRE)
+        vbox.Add(hbox3, 1, wx.ALIGN_CENTRE)
+
+        panel.SetSizer(vbox)
+        self.Centre()
+
+    def OnOk(self, event):
+        self.text.SetLabel("Gathering live matches")
+        self.gauge.UpdateWindowUI()
+        ex.Yield()
+
+        app = wx.App()
+        frm = HelloFrame(None, title='Betting predictions')
+
+        #ex = wx.App()
+
+        results = []
+
+        try:
+            matches = get_matches()
+            
+            self.gauge.SetRange(len(matches) + 3) 
+        
+        except:
+            matches = get_matches()
+            
+            self.gauge.SetRange(len(matches) + 3) 
+        
+        finally:
+            value = 3
+            self.gauge.SetValue(value)
+            self.gauge.UpdateWindowUI()
+            ex.Yield()
+
+            self.text.SetLabel("Gathering stats from matches")
+            self.gauge.UpdateWindowUI()
+            ex.Yield()
+
+            for match in matches:
+                
+                try:
+                    stat_input, standings_unprocessed, url = get_stats1(match) 
+
+                except:
+                    stat_input, standings_unprocessed, url = get_stats1(match) 
+
+                finally:
                     standings = []
                     standings_unprocessed = list_to_string(standings_unprocessed)
-                    
                     standings.append(standings_unprocessed[0])
                     standings.append(standings_unprocessed[3])
                     match_stat = {}
-                    for x in range(int(len(stat_input) / 3)):
+                    
+                    for _ in range(int(len(stat_input) / 3)):
                         match_stat[stat_input[1]] = [stat_input[0], stat_input[2]]
                         stat_input = stat_input[3:]
-                    
+                        
                     team_performance_score = HTG_compare(standings)
                     team_performance_score += ST_compare(match_stat)
                     team_performance_score += S_compare(match_stat)
                     team_performance_score += Y_compare(match_stat)
                     team_performance_score += R_compare(match_stat)
+                    
                     prediction = winning_team(team_performance_score)
                     
                     text = str("In match with url " + url + prediction)    
                     results.append(text)
-                else:
-                    pass
-        driver.quit()
-        results = list_to_string_spaces(results)
-        frm.change_text(results)
-        frm.message("Your predictions are ready, click OK to show")
-        frm.Show()
-        app.MainLoop()
+                    
+                    value = value + 1
+                    self.gauge.SetValue(value)
+                    self.gauge.UpdateWindowUI()
+                    ex.Yield()
+
+                        
+            driver.quit()
+            results = list_to_string_spaces(results)
+            
+            self.text.SetLabel("Task Completed")
+            self.gauge.UpdateWindowUI()
+            ex.Yield()
+
+            frm.change_text(results)
+            frm.message("Your predictions are ready, click OK to show")
+            self.Close()
+
+            frm.Show()
+            app.MainLoop()
+
+    def OnStop(self, event):
+        self.text.SetLabel("Task Interrupted")
+        
+        app = wx.App() #Dummy does not do anything just to allow a message
+        frm = HelloFrame(None, title='Betting app') #Dummy does not do anything just to allow a message
+        frm.message("Task failed successfully! \n \n Why did you click this? Well, now the program is broken so you might as well restart")
+
+class MyApp(wx.App):
+    def OnInit(self):
+        frame = MyFrame(None, -1, "Betting app")
+        frame.Show(True)
+        return True
+
+if __name__ == "__main__":
+    ex = MyApp(0)
+    ex.MainLoop()

@@ -21,9 +21,6 @@ options = Options()
 options.add_argument('--headless')
 options.add_argument('--disable-gpu')
 driver = webdriver.Chrome(options=options)
- 
-#driver = webdriver.Remote(service.service_url)
-#driver.minimize_window()
 
 def HTG_compare(score):
     hometeam = int(score[0])
@@ -336,11 +333,6 @@ class MyFrame(wx.Frame):
     def __init__(self, parent, ID, title):
         wx.Frame.__init__(self, parent, ID, title)
 
-        #self.timer = wx.Timer(self, 1)
-        #self.count = 0
-
-        #self.Bind(wx.EVT_TIMER, self.OnTimer, self.timer)
-
         panel = wx.Panel(self, -1)
         vbox = wx.BoxSizer(wx.VERTICAL)
         hbox1 = wx.BoxSizer(wx.HORIZONTAL)
@@ -351,7 +343,7 @@ class MyFrame(wx.Frame):
         self.btn1 = wx.Button(panel, wx.ID_OK, label="Start")
         self.btn2 = wx.Button(panel, wx.ID_STOP)
         self.text = wx.StaticText(panel, -1, "Click start to run web scraping")
-
+        
         self.Bind(wx.EVT_BUTTON, self.OnOk, self.btn1)
         self.Bind(wx.EVT_BUTTON, self.OnStop, self.btn2)
 
@@ -359,6 +351,7 @@ class MyFrame(wx.Frame):
         hbox2.Add(self.btn1, 1, wx.RIGHT, 10)
         hbox2.Add(self.btn2, 1)
         hbox3.Add(self.text, 1)
+        
         vbox.Add((0, 50), 0)
         vbox.Add(hbox1, 0, wx.ALIGN_CENTRE)
         vbox.Add((0, 30), 0)
@@ -370,7 +363,9 @@ class MyFrame(wx.Frame):
 
     def OnOk(self, event):
         self.text.SetLabel("Gathering live matches")
-        value = 0
+        self.gauge.UpdateWindowUI()
+        ex.Yield()
+
         app = wx.App()
         frm = HelloFrame(None, title='Betting predictions')
 
@@ -378,49 +373,42 @@ class MyFrame(wx.Frame):
 
         results = []
 
-        matches1 = ["eeeez7bKeorA", "eeeeU5iTgPCM", "eeeeSteCc7Dc", "eeeedGaGdRS3", "eeeeQywal3zp", "eeeeIVmPf5cG"]
-        self.gauge.SetRange(len(matches1))
+        matches1 = ["eeeez7bKeorA", "eeeeU5iTgPCM", "eeeeSteCc7Dc", "eeeedGaGdRS3", "eeeeQywal3zp", "eeeeIVmPf5cG"] #Set of old matches for demo version
         try:
             matches = get_matches()
-            print(matches)
-            self.gauge.SetRange(len(matches1) + 1) #Should be matches in full version
+            
+            self.gauge.SetRange(len(matches1) + 3) #Should be matches in full version
         
         except:
             matches = get_matches()
-            print(matches)
-            self.gauge.SetRange(len(matches1) + 1) #Should be matches in full version
+            
+            self.gauge.SetRange(len(matches1) + 3) #Should be matches in full version
         
         finally:
-            self.text.SetLabel("Gathering stats from matches")
-            value = value + 1
+            value = 3
             self.gauge.SetValue(value)
             self.gauge.UpdateWindowUI()
-            wx.Yield()
-            #bar = progress_bar(None,'Web scraping progress', len(matches1))
-            #bar.Show()
+            ex.Yield()
 
-            #t = threading.Thread(target=ex.MainLoop)
-            #x = threading.Thread(target=mywin.increment, args=(3,))
-            #x.setDaemon(1)
-            #x.start()
+            self.text.SetLabel("Gathering stats from matches")
+            self.gauge.UpdateWindowUI()
+            ex.Yield()
 
-            #progress = 0
-
-            for match in matches1:
+            for match in matches1: #Should be matches once matches are live again
+                
                 try:
-                    stat_input, standings_unprocessed, url = get_stats1(match) #Should be matches once matches are live again
+                    stat_input, standings_unprocessed, url = get_stats1(match) 
 
                 except:
-                    stat_input, standings_unprocessed, url = get_stats1(match) #Should be matches once matches are live again
+                    stat_input, standings_unprocessed, url = get_stats1(match) 
 
                 finally:
-                    #mainloop_thread()
                     standings = []
                     standings_unprocessed = list_to_string(standings_unprocessed)
-                        
                     standings.append(standings_unprocessed[0])
                     standings.append(standings_unprocessed[3])
                     match_stat = {}
+                    
                     for _ in range(int(len(stat_input) / 3)):
                         match_stat[stat_input[1]] = [stat_input[0], stat_input[2]]
                         stat_input = stat_input[3:]
@@ -430,61 +418,38 @@ class MyFrame(wx.Frame):
                     team_performance_score += S_compare(match_stat)
                     team_performance_score += Y_compare(match_stat)
                     team_performance_score += R_compare(match_stat)
+                    
                     prediction = winning_team(team_performance_score)
                     
                     text = str("In match with url " + url + prediction)    
                     results.append(text)
+                    
                     value = value + 1
                     self.gauge.SetValue(value)
                     self.gauge.UpdateWindowUI()
-                    wx.Yield()
+                    ex.Yield()
 
-                    #progress = progress + 1
-                    #bar.increment(progress)
-                    #print("Match done")
-                    
                         
             driver.quit()
             results = list_to_string_spaces(results)
+            
             self.text.SetLabel("Task Completed")
+            self.gauge.UpdateWindowUI()
+            ex.Yield()
+
             frm.change_text(results)
-            self.Close()
             frm.message("Your predictions are ready, click OK to show")
+            self.Close()
 
             frm.Show()
             app.MainLoop()
 
-
-
-
-
-
-
-
-        #value = self.gauge.GetValue
-        #for y in range(50):
-            #print(y)
-            #self.text.SetLabel("Task in Progress")
-            #self.gauge.SetValue(y)
-            #value = self.gauge.GetValue
-            #if value == 50:
-                #self.text.SetLabel("Task Completed")
-
-            #self.timer.Start(100)
-            #self.text.SetLabel("Task in Progress")
-
     def OnStop(self, event):
         self.text.SetLabel("Task Interrupted")
-        app = wx.App()
+        
+        app = wx.App() #Dummy does not do anything just to allow a message
         frm = HelloFrame(None, title='Betting app') #Dummy does not do anything just to allow a message
         frm.message("Task failed successfully! \n \n Why did you click this? Well, now the program is broken so you might as well restart")
-
-    #def OnTimer(self, event):
-        #self.count = self.count +1
-        #self.gauge.SetValue(self.count)
-        #if self.count == 50:
-            #self.timer.Stop()
-            #self.text.SetLabel("Task Completed")
 
 class MyApp(wx.App):
     def OnInit(self):
