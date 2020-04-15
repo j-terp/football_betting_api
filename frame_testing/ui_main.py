@@ -26,40 +26,42 @@ class HelloFrame(wx.Frame):
         self.SetSize((1200, 800))
         self.makeMenuBar()
         self.CreateStatusBar()
-        self.SetStatusText("Welcome to wxPython!")
         self.mycount = 0
 
     def makeMenuBar(self):
         fileMenu = wx.Menu()
-        helloItem = fileMenu.Append(-1, "&Hello...\tCtrl-H",
-        "Help string shown in status bar for this menu item")
         fileMenu.AppendSeparator()
         exitItem = fileMenu.Append(wx.ID_EXIT)
 
         helpMenu = wx.Menu()
+        self_destruct_menu = wx.Menu()
+        self_destruct = self_destruct_menu.Append(wx.ID_EXECUTE)
+
         aboutItem = helpMenu.Append(wx.ID_ABOUT)
 
         menuBar = wx.MenuBar()
-        menuBar.Append(fileMenu, "&file")
-        menuBar.Append(helpMenu, "&help")
+        menuBar.Append(fileMenu, "&Quit")
+        menuBar.Append(self_destruct_menu, "&Execute order 66")
+        menuBar.Append(helpMenu, "&Help")
 
         self.SetMenuBar(menuBar)
 
-        self.Bind(wx.EVT_MENU, self.OnHello, helloItem)
         self.Bind(wx.EVT_MENU, self.OnExit, exitItem)
         self.Bind(wx.EVT_MENU, self.OnAbout, aboutItem)
+        self.Bind(wx.EVT_MENU, self.OnSelf_destruct, self_destruct)
 
     def OnExit(self, event):
         self.Close(True)
 
-    def OnHello(self, event):
-        self.mycount += 1
-        mystring = "Betting Display No: " + str(self.mycount)
-        self.st.SetLabel(mystring)
-        wx.MessageBox("Hello again from wxPython")
-
     def OnAbout(self, event):
-        wx.MessageBox("This is a wxPython Hello World Sample", "About Hello World 2", wx.OK|wx.ICON_INFORMATION)
+        wx.MessageBox("These are your betting predictions for which team will win, A stands for away team, H stands for home team and D stands for draw!")
+
+    def OnSelf_destruct(self, event):
+        mystring = "It will be done my lord!"
+
+        wx.MessageBox(mystring)
+                                
+        self.Close(True)
     
     def change_text(self, text):
         self.st.SetLabel(text)

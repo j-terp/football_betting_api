@@ -9,7 +9,6 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
 from data_testing.get_values import football_values
 from frame_testing.ui_main import HelloFrame
-from frame_testing.progress_bar2 import progress_bar
 import wx
 from selenium.webdriver.chrome.options import Options
 import threading
@@ -341,7 +340,7 @@ class MyFrame(wx.Frame):
 
         self.gauge = wx.Gauge(panel, -1, 10, size=(250, 25))
         self.btn1 = wx.Button(panel, wx.ID_OK, label="Start")
-        self.btn2 = wx.Button(panel, wx.ID_STOP)
+        self.btn2 = wx.Button(panel, wx.ID_STOP, label="Cancel")
         self.text = wx.StaticText(panel, -1, "Click start to run web scraping")
         
         self.Bind(wx.EVT_BUTTON, self.OnOk, self.btn1)
@@ -375,12 +374,12 @@ class MyFrame(wx.Frame):
 
         matches1 = ["eeeez7bKeorA", "eeeeU5iTgPCM", "eeeeSteCc7Dc", "eeeedGaGdRS3", "eeeeQywal3zp", "eeeeIVmPf5cG"] #Set of old matches for demo version
         try:
-            matches = get_matches()
+            matches = get_matches() #Will not be used in demo version due to no live matches
             
             self.gauge.SetRange(len(matches1) + 3) #Should be matches in full version
         
         except:
-            matches = get_matches()
+            matches = get_matches() #Will not be used in demo version due to no live matches
             
             self.gauge.SetRange(len(matches1) + 3) #Should be matches in full version
         
@@ -433,10 +432,11 @@ class MyFrame(wx.Frame):
             driver.quit()
             results = list_to_string_spaces(results)
             
-            self.text.SetLabel("Task Completed")
+            self.text.SetLabel("Calculations finished")
             self.gauge.UpdateWindowUI()
             ex.Yield()
-
+            time.sleep(1)
+            
             frm.change_text(results)
             frm.message("Your predictions are ready, click OK to show")
             self.Close()
@@ -446,10 +446,10 @@ class MyFrame(wx.Frame):
 
     def OnStop(self, event):
         self.text.SetLabel("Task Interrupted")
-        
-        app = wx.App() #Dummy does not do anything just to allow a message
-        frm = HelloFrame(None, title='Betting app') #Dummy does not do anything just to allow a message
-        frm.message("Task failed successfully! \n \n Why did you click this? Well, now the program is broken so you might as well restart")
+        self.Close()
+        #app = wx.App() #Dummy does not do anything just to allow a message
+        #frm = HelloFrame(None, title='Betting app') #Dummy does not do anything just to allow a message
+        #frm.message("Task failed successfully! \n \n Why did you click this? Well, now the program is broken so you might as well restart")
 
 class MyApp(wx.App):
     def OnInit(self):
