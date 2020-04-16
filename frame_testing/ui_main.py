@@ -41,8 +41,8 @@ class HelloFrame(wx.Frame):
 
         menuBar = wx.MenuBar()
         menuBar.Append(fileMenu, "&Quit")
-        menuBar.Append(self_destruct_menu, "&Execute order 66")
         menuBar.Append(helpMenu, "&Help")
+        menuBar.Append(self_destruct_menu, "&Execute order 66")
 
         self.SetMenuBar(menuBar)
 
