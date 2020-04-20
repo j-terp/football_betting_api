@@ -19,7 +19,9 @@ service.start()
 options = Options()
 options.add_argument('--headless')
 options.add_argument('--disable-gpu')
-driver = webdriver.Chrome(options=options)
+driver = webdriver.Chrome(options=options, executable_path=r'C:/webdrivers/chromedriver.exe')
+
+
 
 def HTG_compare(score):
     hometeam = int(score[0])

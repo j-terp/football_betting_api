@@ -13,17 +13,18 @@ class HelloFrame(wx.Frame):
 
         pnl = wx.Panel(self)
         self.st = wx.StaticText(pnl, label = "Betting")
-        font = self.st.GetFont()
-        font.PointSize += 5
-        font = font.Bold()
+        font = wx.Font(12, wx.DECORATIVE, wx.NORMAL, wx.NORMAL)
         self.st.SetFont(font)
+        #font.PointSize = 5
+        #font = font.Bold()
+        #self.st.SetFont(font)
 
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self.st, wx.SizerFlags().Border(wx.TOP|wx.LEFT, 25))
         pnl.SetSizer(sizer)
 
         self.Centre()
-        self.SetSize((1200, 800))
+        self.SetSize((800, 400))
         self.makeMenuBar()
         self.CreateStatusBar()
         self.mycount = 0
