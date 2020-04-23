@@ -110,7 +110,7 @@ def betting(match, results, points, value):
     else: return 0, 0
 
 
-file_list = ["E0_2005.csv", "E0_2006.csv", "E0_2007.csv", "E0_2008.csv", "E0_2009.csv", "E0_2010.csv", "E0_2011.csv", "E0_2012.csv", "E0_2013.csv", "E0_2014.csv", "football_data.csv"]
+file_list = ["imported_data/E0_2005.csv", "imported_data/E0_2006.csv", "imported_data/E0_2007.csv", "imported_data/E0_2008.csv", "imported_data/E0_2009.csv", "imported_data/E0_2010.csv", "imported_data/E0_2011.csv", "imported_data/E0_2012.csv", "imported_data/E0_2013.csv", "imported_data/E0_2014.csv", "imported_data/football_data.csv"]
 
 for value in range(22):
     predictions_correct = 0
@@ -122,7 +122,7 @@ for value in range(22):
         match_list = dataset_to_dictionary(relevant_data) # Konverterar datan till dictionary
         # match_list[index för matchens rad][target-data]
 
-        row = single_match(0)
+        row = single_match(0, file)
 
         for y in match_list:
             results = HTG_compare(y)[0]
